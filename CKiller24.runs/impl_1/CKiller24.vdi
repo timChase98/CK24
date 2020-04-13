@@ -1,0 +1,16 @@
+#-----------------------------------------------------------
+# Vivado v2019.2 (64-bit)
+# SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
+# IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+# Start of session at: Mon Apr 13 09:56:42 2020
+# Process ID: 29319
+# Current directory: /home/sa/tmc/CK24/CKiller24.runs/impl_1
+# Command line: vivado -log CKiller24.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source CKiller24.tcl -notrace
+# Log file: /home/sa/tmc/CK24/CKiller24.runs/impl_1/CKiller24.vdi
+# Journal file: /home/sa/tmc/CK24/CKiller24.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source CKiller24.tcl -notrace
+Command: link_design -top CKiller24 -part xc7a100tcsg324-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7a100tcsg324-1
