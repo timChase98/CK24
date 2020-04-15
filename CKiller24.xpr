@@ -104,6 +104,30 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/imports/tmc/SevenSegmentDecoder.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../SevenSegmentDecoder.vhd"/>
+          <Attr Name="ImportTime" Val="1586803736"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/tmc/Decoder3_8.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../Decoder3_8.vhd"/>
+          <Attr Name="ImportTime" Val="1586803792"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/tmc/SevenSegmentDigitController.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../SevenSegmentDigitController.vhd"/>
+          <Attr Name="ImportTime" Val="1586803736"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="CKiller24"/>

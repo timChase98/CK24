@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1586785832">
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1586962648">
   <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
   <File Type="BITSTR-SYSDEF" Name="CKiller24.sysdef"/>
   <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
@@ -115,6 +115,30 @@
     </File>
     <File Path="$PSRCDIR/sources_1/ip/progmem/progmemInit.coe">
       <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/tmc/SevenSegmentDecoder.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../SevenSegmentDecoder.vhd"/>
+        <Attr Name="ImportTime" Val="1586803736"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/tmc/Decoder3_8.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../Decoder3_8.vhd"/>
+        <Attr Name="ImportTime" Val="1586803792"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/tmc/SevenSegmentDigitController.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../SevenSegmentDigitController.vhd"/>
+        <Attr Name="ImportTime" Val="1586803736"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>

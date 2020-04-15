@@ -17,6 +17,7 @@ proc create_report { reportName command } {
     send_msg_id runtcl-5 warning "$msg"
   }
 }
+set_param chipscope.maxJobs 7
 set_param xicom.use_bs_reader 1
 create_project -in_memory -part xc7a100tcsg324-1
 
@@ -39,6 +40,9 @@ read_vhdl -library xil_defaultlib {
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/new/RegisterFile.vhd
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/new/Top.vhd
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd
+  /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd
+  /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd
+  /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd
 }
 read_ip -quiet /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
 set_property used_in_implementation false [get_files -all /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_ooc.xdc]

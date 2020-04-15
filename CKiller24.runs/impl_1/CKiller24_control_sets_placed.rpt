@@ -1,0 +1,86 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
+| Date         : Wed Apr 15 11:07:05 2020
+| Host         : cumulus running 64-bit Ubuntu 15.04
+| Command      : report_control_sets -verbose -file CKiller24_control_sets_placed.rpt
+| Design       : CKiller24
+| Device       : xc7a100t
+--------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |     8 |
+|    Minimum number of control sets                        |     8 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    28 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |     8 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     1 |
+| >= 6 to < 8        |     0 |
+| >= 8 to < 10       |     0 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |     0 |
+| >= 16              |     7 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              96 |           29 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |               0 |            0 |
+| Yes          | No                    | No                     |              44 |           28 |
+| Yes          | No                    | Yes                    |              16 |            5 |
+| Yes          | Yes                   | No                     |               0 |            0 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++--------------------+---------------------------------+------------------+------------------+----------------+
+|    Clock Signal    |          Enable Signal          | Set/Reset Signal | Slice Load Count | Bel Load Count |
++--------------------+---------------------------------+------------------+------------------+----------------+
+|  clk_IBUF_BUFG     | cu/FSM_onehot_fstate[3]_i_1_n_0 |                  |                1 |              4 |
+|  clk_IBUF_BUFG     | cu/PC_0                         | rst_IBUF         |                5 |             16 |
+|  clk_IBUF_BUFG     | cu/progmemAddr[15]_i_1_n_0      |                  |                4 |             16 |
+|  clk100M_IBUF_BUFG |                                 |                  |                5 |             18 |
+|  pxlClk            |                                 |                  |                9 |             18 |
+|  clk_IBUF_BUFG     |                                 |                  |                8 |             19 |
+|  clk_IBUF_BUFG     | cu/IR[23]_i_1_n_0               |                  |               23 |             24 |
+|  irValid_BUFG      |                                 |                  |                7 |             42 |
++--------------------+---------------------------------+------------------+------------------+----------------+
+
+
