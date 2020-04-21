@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-| Date         : Tue Apr 21 15:29:17 2020
+| Date         : Tue Apr 21 16:51:21 2020
 | Host         : cumulus running 64-bit Ubuntu 15.04
 | Command      : report_methodology -file CKiller24_methodology_drc_routed.rpt -pb CKiller24_methodology_drc_routed.pb -rpx CKiller24_methodology_drc_routed.rpx
 | Design       : CKiller24

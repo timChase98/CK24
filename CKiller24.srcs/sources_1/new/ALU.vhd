@@ -42,6 +42,7 @@ architecture Behavioral of ALU is
 
 begin
     with op select R <= 
+        X"000000"           when "00010", -- CLR 
         A + 1               when "00100", -- INC 
         A - 1               when "00101", -- DEC
         (not A) + 1         when "00111", -- NEG

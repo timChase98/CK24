@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-| Date         : Tue Apr 21 15:29:22 2020
+| Date         : Tue Apr 21 16:51:26 2020
 | Host         : cumulus running 64-bit Ubuntu 15.04
 | Command      : report_timing_summary -max_paths 10 -file CKiller24_timing_summary_routed.rpt -pb CKiller24_timing_summary_routed.pb -rpx CKiller24_timing_summary_routed.rpx -warn_on_violation
 | Design       : CKiller24

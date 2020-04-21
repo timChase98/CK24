@@ -163,7 +163,7 @@ begin
                 when OP2 => 
                     exeOut <= "10";case opState is 
                         when setRegA => 
-                            regAddr <= op1Val; 
+                            regAddr <= op2Val; 
                             opState <= getRegD;
                         when getRegD => 
                             opB <= regDataQ;
