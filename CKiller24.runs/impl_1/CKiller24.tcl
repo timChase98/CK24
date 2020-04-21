@@ -93,7 +93,7 @@ start_step opt_design
 set ACTIVE_STEP opt_design
 set rc [catch {
   create_msg_db opt_design.pb
-  opt_design 
+  opt_design -directive RuntimeOptimized
   write_checkpoint -force CKiller24_opt.dcp
   create_report "impl_1_opt_report_drc_0" "report_drc -file CKiller24_drc_opted.rpt -pb CKiller24_drc_opted.pb -rpx CKiller24_drc_opted.rpx"
   close_msg_db -file opt_design.pb
@@ -113,7 +113,7 @@ set rc [catch {
   if { [llength [get_debug_cores -quiet] ] > 0 }  { 
     implement_debug_core 
   } 
-  place_design 
+  place_design -directive RuntimeOptimized
   write_checkpoint -force CKiller24_placed.dcp
   create_report "impl_1_place_report_io_0" "report_io -file CKiller24_io_placed.rpt"
   create_report "impl_1_place_report_utilization_0" "report_utilization -file CKiller24_utilization_placed.rpt -pb CKiller24_utilization_placed.pb"
@@ -132,7 +132,7 @@ start_step route_design
 set ACTIVE_STEP route_design
 set rc [catch {
   create_msg_db route_design.pb
-  route_design 
+  route_design -directive RuntimeOptimized
   write_checkpoint -force CKiller24_routed.dcp
   create_report "impl_1_route_report_drc_0" "report_drc -file CKiller24_drc_routed.rpt -pb CKiller24_drc_routed.pb -rpx CKiller24_drc_routed.rpx"
   create_report "impl_1_route_report_methodology_0" "report_methodology -file CKiller24_methodology_drc_routed.rpt -pb CKiller24_methodology_drc_routed.pb -rpx CKiller24_methodology_drc_routed.rpx"

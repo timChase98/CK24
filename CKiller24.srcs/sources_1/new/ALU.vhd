@@ -35,13 +35,13 @@ entity ALU is
     Port ( A : in STD_LOGIC_VECTOR (23 downto 0);
            B : in STD_LOGIC_VECTOR (23 downto 0);
            OP : in STD_LOGIC_VECTOR (4 downto 0);
-           G : out STD_LOGIC_VECTOR (23 downto 0));
+           R : out STD_LOGIC_VECTOR (23 downto 0));
 end ALU;
 
 architecture Behavioral of ALU is
 
 begin
-    with op select G <= 
+    with op select R <= 
         A + 1               when "00100", -- INC 
         A - 1               when "00101", -- DEC
         (not A) + 1         when "00111", -- NEG
@@ -54,8 +54,8 @@ begin
         A or B              when "10100", -- OR
         A xor B             when "10101", -- XOR
         A + B               when "10110", -- ADDI
-        A - B               when "10111"; -- SUBI
-        
+        A - B               when "10111", -- SUBI
+        X"000000"           when others;        
 
 end Behavioral;
 

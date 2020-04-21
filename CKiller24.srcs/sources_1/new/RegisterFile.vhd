@@ -35,7 +35,6 @@ use IEEE.NUMERIC_STD.ALL;
 entity RegisterFile is
     Port ( addr : in STD_LOGIC_VECTOR (2 downto 0);
            clk : in STD_LOGIC;
-           en : in STD_LOGIC;
            d : in STD_LOGIC_VECTOR (23 downto 0);
            q : out STD_LOGIC_VECTOR (23 downto 0));
 end RegisterFile;
@@ -45,7 +44,7 @@ architecture Behavioral of RegisterFile is
     signal registers : registerFile;
     signal addressDecoder : std_logic_vector(7 downto 0);
 begin
-    ad : entity DEC8_1 PORT MAP (a => addr, en => en, d => addressDecoder);    
+    ad : entity DEC8_1 PORT MAP (a => addr, en => '1', d => addressDecoder);    
 
     r0 : entity Reg PORT MAP(d => d, q => registers(0), en => addressDecoder(0), clk => clk);
     r1 : entity Reg PORT MAP(d => d, q => registers(1), en => addressDecoder(1), clk => clk);

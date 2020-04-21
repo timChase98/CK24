@@ -43,6 +43,7 @@ read_vhdl -library xil_defaultlib {
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd
   /home/sa/tmc/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd
+  /home/sa/tmc/CK24/CKiller24.srcs/sources_1/new/instructionDecoder.vhd
 }
 read_ip -quiet /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
 set_property used_in_implementation false [get_files -all /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_ooc.xdc]
@@ -61,7 +62,7 @@ set_property used_in_implementation false [get_files /home/sa/tmc/CK24/CKiller24
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 
-synth_design -top CKiller24 -part xc7a100tcsg324-1
+synth_design -top CKiller24 -part xc7a100tcsg324-1 -flatten_hierarchy none -directive RuntimeOptimized -fsm_extraction off -quick
 
 
 # disable binary constraint mode for synth run checkpoints
