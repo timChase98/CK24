@@ -1,7 +1,7 @@
-add 1, 2
-sub 2, 3; this is a comment
-thisIsALabel:
-add 3, 4
-inc 
-add 3, 4
-add 3, 2, 4
+CLR R0
+CLR R1
+ADDI R1, 1
+ADD R0, R1
+ADD R0, R1
+ADD R0, R1
+ADD R0, R1
