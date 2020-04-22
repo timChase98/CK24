@@ -30,7 +30,8 @@ entity CKiller24 is
 		  sel: in STD_LOGIC;
 		  AN : out STD_LOGIC_VECTOR (7 downto 0);
           CA : out STD_LOGIC_VECTOR (6 downto 0);
-          exeState : out STD_LOGIC_VECTOR(1 downto 0)
+          exeState : out STD_LOGIC_VECTOR(1 downto 0);
+          rfa : out STD_LOGIC_VECTOR(2 downto 0)
 	);
 end CKiller24;
 
@@ -38,6 +39,7 @@ architecture Behavioral of CKiller24 is
 
     signal ir : std_logic_vector(23 downto 0);
     signal op : std_logic_vector(4 downto 0);
+    signal pc : std_logic_vector(15 downto 0);
     
     signal display : std_logic_vector(31 downto 0);
     signal clkDiv : std_logic_vector(20 downto 0);
@@ -59,7 +61,7 @@ begin
 	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR);
 
     cu: entity ControlUnit PORT MAP(clk => clk, rst => rst, 
-        irOut => ir, exeout => exeState,
+        irOut => ir, exeout => exeState,pcOut => PC, 
         regClk => regFileC,
         regAddr => regFileA,
         regDataD => regFileD,
@@ -74,7 +76,7 @@ begin
            data => display, latch => clkDiv(19), 
            AN => AN, CA => CA);
     
-    display <= (X"00" & regFileD) when sel = '1' else (X"00" & IR); 
+    display <= (X"00" & regFileD) when sel = '1' else (PC(7 downto 0) & IR); 
     
     process(clk100M)
     begin 
@@ -82,6 +84,8 @@ begin
             clkdiv <= clkDiv + 1;
         end if;
     end process;
+    
+    rfa <= RegFileA;
     
 
 end Behavioral;

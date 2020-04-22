@@ -42,20 +42,21 @@ architecture Behavioral of ALU is
 
 begin
     with op select R <= 
-        X"000000"           when "00010", -- CLR 
-        A + 1               when "00100", -- INC 
-        A - 1               when "00101", -- DEC
+        X"000000"           when "00100", -- CLR 
+        A + 1               when "00101", -- INC 
+        A - 1               when "00110", -- DEC
         (not A) + 1         when "00111", -- NEG
         --SHIFT_LEFT(A, B)    when "01000", -- SLL
         --SHIFT_RIGHT(A, B)   when "01001", -- SLL
         A + B               when "10000", -- ADD
         A - B               when "10001", -- SUB
-        -- divide           when "10010", -- DIV
-        A and B             when "10011", -- AND
-        A or B              when "10100", -- OR
-        A xor B             when "10101", -- XOR
-        A + B               when "10110", -- ADDI
-        A - B               when "10111", -- SUBI
+        -- mult             when "10010", -- mul
+        -- divide           when "10011", -- DIV
+        A and B             when "10100", -- AND
+        A or B              when "10101", -- OR
+        A xor B             when "10110", -- XOR
+        A + B               when "10111", -- ADDI
+        A - B               when "11000", -- SUBI
         X"000000"           when others;        
 
 end Behavioral;

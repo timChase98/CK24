@@ -65,19 +65,19 @@ start_step init_design
 set ACTIVE_STEP init_design
 set rc [catch {
   create_msg_db init_design.pb
-  set_param chipscope.maxJobs 7
+  set_param chipscope.maxJobs 1
   set_param xicom.use_bs_reader 1
   create_project -in_memory -part xc7a100tcsg324-1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
-  set_property webtalk.parent_dir /home/sa/tmc/CK24/CKiller24.cache/wt [current_project]
-  set_property parent.project_path /home/sa/tmc/CK24/CKiller24.xpr [current_project]
-  set_property ip_output_repo /home/sa/tmc/CK24/CKiller24.cache/ip [current_project]
+  set_property webtalk.parent_dir C:/Users/tim_c/CK24/CKiller24.cache/wt [current_project]
+  set_property parent.project_path C:/Users/tim_c/CK24/CKiller24.xpr [current_project]
+  set_property ip_output_repo C:/Users/tim_c/CK24/CKiller24.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES XPM_MEMORY [current_project]
-  add_files -quiet /home/sa/tmc/CK24/CKiller24.runs/synth_1/CKiller24.dcp
-  read_ip -quiet /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
-  read_xdc /home/sa/tmc/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc
+  add_files -quiet C:/Users/tim_c/CK24/CKiller24.runs/synth_1/CKiller24.dcp
+  read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
+  read_xdc C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc
   link_design -top CKiller24 -part xc7a100tcsg324-1
   close_msg_db -file init_design.pb
 } RESULT]

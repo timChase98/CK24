@@ -30,6 +30,7 @@ entity ControlUnit is
            regDataQ : in STD_LOGIC_VECTOR(23 downto 0);
            aluRegR : in STD_LOGIC_VECTOR(23 downto 0);
            irOut : out STD_LOGIC_VECTOR(23 downto 0);
+           pcOut : out STD_LOGIC_VECTOR(15 downto 0);
            exeOut : out std_logic_vector(1 downto 0);
            regClk : out std_logic;
            regAddr : out STD_LOGIC_VECTOR(2 downto 0);
@@ -55,7 +56,7 @@ architecture Behavioral of ControlUnit is
       );
     end component; 
 
-    TYPE instructionState IS (FETCH, OP1, OP2, EXE);
+    TYPE instructionState IS (RESET, FETCH, OP1, OP2, EXE);
     TYPE fetchState IS (setAddr, addrValid, dataValid, pcInc);
     TYPE operandState IS (setRegA, getRegD, dummy1, dummy2);
     TYPE executionState IS (opALU, aluRst, store);
@@ -94,15 +95,18 @@ begin
     begin 
         if(rst = '1') then 
             -- init states
-            iState <= FETCH;
+            iState <= RESET;
             fstate <= setAddr;
             opState <= setRegA;
              
-            -- set the program counter to 0
+            -- set the program counter and instruction register to 0
             PC <= PC xor PC;
+            IR <= IR xor IR;
             
         elsif (rising_edge(clk)) then
             case iState is 
+                when RESET => 
+                    iState <= FETCH; 
                 when FETCH => 
                     exeOut <= "00";
                     case fstate is 
@@ -127,6 +131,8 @@ begin
                                     iState <= OP1;
                                 when "10" => 
                                     iState <= OP1;
+                                when "11" => 
+                                    iState <= FETCH;
                                 when others => 
                                     iState <= FETCH; 
                             end case;
@@ -217,6 +223,7 @@ begin
     pm :  progmem PORT MAP (addra => progmemAddr, clka => clk, dina => X"000000",
     douta => progmemData, ena => '1', rsta => rst, Wea => "0");
     irOut <= IR; 
+    pcOut <= PC;
     
     
     OPCode <= IR(23 downto 19);

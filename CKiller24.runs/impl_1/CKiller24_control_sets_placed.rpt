@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
-| Date         : Tue Apr 21 16:48:16 2020
-| Host         : cumulus running 64-bit Ubuntu 15.04
+| Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
+| Date         : Wed Apr 22 18:26:51 2020
+| Host         : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file CKiller24_control_sets_placed.rpt
 | Design       : CKiller24
 | Device       : xc7a100t
@@ -27,7 +27,7 @@ Table of Contents
 |    Minimum number of control sets                        |    21 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    30 |
+| Unused register locations in slices containing registers |    23 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -58,11 +58,11 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |             101 |           24 |
-| No           | No                    | Yes                    |               6 |            2 |
+| No           | No                    | No                     |             115 |           33 |
+| No           | No                    | Yes                    |               7 |            3 |
 | No           | Yes                   | No                     |               0 |            0 |
-| Yes          | No                    | No                     |             359 |          114 |
-| Yes          | No                    | Yes                    |              16 |            5 |
+| Yes          | No                    | No                     |             335 |          106 |
+| Yes          | No                    | Yes                    |              40 |           29 |
 | Yes          | Yes                   | No                     |               0 |            0 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
@@ -74,26 +74,26 @@ Table of Contents
 |     Clock Signal     |        Enable Signal       | Set/Reset Signal | Slice Load Count | Bel Load Count |
 +----------------------+----------------------------+------------------+------------------+----------------+
 |  clk_IBUF_BUFG       | cu/exeOut[1]_i_1_n_0       |                  |                1 |              2 |
-|  clk_IBUF_BUFG       |                            | rst_IBUF         |                2 |              6 |
-|  clk_IBUF_BUFG       | cu/PC[15]_i_1_n_0          | rst_IBUF         |                5 |             16 |
+|  clk_IBUF_BUFG       |                            | rst_IBUF         |                3 |              7 |
+|  clk_IBUF_BUFG       | cu/PC[7]_i_1_n_0           | rst_IBUF         |                5 |             16 |
 |  clk_IBUF_BUFG       | cu/progmemAddr[15]_i_1_n_0 |                  |                3 |             16 |
-|  clkDiv_reg_BUFG[17] |                            |                  |                6 |             18 |
+|  clkDiv_reg_BUFG[17] |                            |                  |                8 |             18 |
 |  clk100M_IBUF_BUFG   |                            |                  |                5 |             20 |
-|  clk_IBUF_BUFG       |                            |                  |                7 |             22 |
-|  cu/regClk_BUFG      | rf/ad/D[7]                 |                  |               14 |             24 |
-|  clk_IBUF_BUFG       | cu/opB[23]_i_1_n_0         |                  |                7 |             24 |
-|  clk_IBUF_BUFG       | cu/IR[23]_i_1_n_0          |                  |               20 |             24 |
-|  clk_IBUF_BUFG       | cu/opA[23]_i_1_n_0         |                  |                7 |             24 |
-|  clk_IBUF_BUFG       | cu/regDataD[23]_i_1_n_0    |                  |               10 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[5]                 |                  |                9 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[4]                 |                  |                6 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[6]                 |                  |                7 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[3]                 |                  |                5 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[2]                 |                  |                5 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[1]                 |                  |                5 |             24 |
-|  cu/regClk_BUFG      | rf/ad/D[0]                 |                  |                6 |             24 |
-|  clkDiv_reg_BUFG[19] |                            |                  |                6 |             42 |
-|  clk_IBUF_BUFG       | cu/aluRegA[23]_i_1_n_0     |                  |                9 |             53 |
+|  clk_IBUF_BUFG       |                            |                  |                9 |             22 |
+|  clk_IBUF_BUFG       | cu/IR                      | rst_IBUF         |               24 |             24 |
+|  clk_IBUF_BUFG       | cu/opB[23]_i_1_n_0         |                  |                4 |             24 |
+|  clk_IBUF_BUFG       | cu/opA[23]_i_1_n_0         |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | cu/regDataD[23]_i_1_n_0    |                  |                9 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[4]                 |                  |               13 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[5]                 |                  |                8 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[7]                 |                  |               11 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[6]                 |                  |               10 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[3]                 |                  |                7 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[1]                 |                  |                8 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[0]                 |                  |                8 |             24 |
+|  cu/regClk_BUFG      | rf/ad/D[2]                 |                  |                8 |             24 |
+|  clk_IBUF_BUFG       | cu/aluRegA[23]_i_1_n_0     |                  |               10 |             53 |
+|  clkDiv_reg_BUFG[19] |                            |                  |               11 |             56 |
 +----------------------+----------------------------+------------------+------------------+----------------+
 
 

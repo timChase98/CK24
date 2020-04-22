@@ -1,12 +1,12 @@
 #-----------------------------------------------------------
 # Vivado v2019.2 (64-bit)
-# SW Build 2708876 on Wed Nov  6 21:39:14 MST 2019
+# SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
 # IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
-# Start of session at: Wed Apr 15 14:11:21 2020
-# Process ID: 31749
-# Current directory: /home/sa/tmc/CK24/CKiller24.runs/progmem_synth_1
-# Command line: vivado -log progmem.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source progmem.tcl
-# Log file: /home/sa/tmc/CK24/CKiller24.runs/progmem_synth_1/progmem.vds
-# Journal file: /home/sa/tmc/CK24/CKiller24.runs/progmem_synth_1/vivado.jou
+# Start of session at: Wed Apr 22 18:21:50 2020
+# Process ID: 5900
+# Current directory: C:/Users/tim_c/CK24/CKiller24.runs/progmem_synth_1
+# Command line: vivado.exe -log progmem.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source progmem.tcl
+# Log file: C:/Users/tim_c/CK24/CKiller24.runs/progmem_synth_1/progmem.vds
+# Journal file: C:/Users/tim_c/CK24/CKiller24.runs/progmem_synth_1\vivado.jou
 #-----------------------------------------------------------
 source progmem.tcl -notrace

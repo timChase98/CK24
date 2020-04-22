@@ -1,9 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
--- Tool Version: Vivado v.2019.2 (lin64) Build 2708876 Wed Nov  6 21:39:14 MST 2019
--- Date        : Wed Apr 15 14:22:52 2020
--- Host        : cumulus running 64-bit Ubuntu 15.04
--- Command     : write_vhdl -force -mode synth_stub /home/sa/tmc/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_stub.vhdl
+-- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
+-- Date        : Wed Apr 22 18:23:42 2020
+-- Host        : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode synth_stub
+--               C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_stub.vhdl
 -- Design      : progmem
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a100tcsg324-1
