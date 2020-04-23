@@ -48,7 +48,10 @@ def instructionToBin24(line):
     return int(instructionString, 2)
 
 def decodeArgToAddrMode(op):
+    if "(" in op:
+        return "01{0:03b}".format(int(op.strip()[2]))
     return "00{0:03b}".format(int(op.strip()[1]))
+
 
 instructionSet = readInstructonSetFile()
 
