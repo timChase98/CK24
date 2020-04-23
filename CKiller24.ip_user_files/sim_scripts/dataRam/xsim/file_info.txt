@@ -1,0 +1,1 @@
+dataRam_sim_netlist.vhdl,vhdl,xil_defaultlib,../../../../CKiller24.srcs/sources_1/ip/dataRam/dataRam_sim_netlist.vhdl,
