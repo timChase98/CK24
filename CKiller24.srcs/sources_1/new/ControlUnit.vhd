@@ -28,6 +28,7 @@ entity ControlUnit is
     Port ( clk : in STD_LOGIC;
            rst : in STD_LOGIC;
            regDataQ : in STD_LOGIC_VECTOR(23 downto 0);
+           ramDataQ : in STD_LOGIC_VECTOR(23 downto 0);
            aluRegR : in STD_LOGIC_VECTOR(23 downto 0);
            irOut : out STD_LOGIC_VECTOR(23 downto 0);
            pcOut : out STD_LOGIC_VECTOR(15 downto 0);
@@ -35,6 +36,9 @@ entity ControlUnit is
            regClk : out std_logic;
            regAddr : out STD_LOGIC_VECTOR(2 downto 0);
            regDataD : out STD_LOGIC_VECTOR(23 downto 0);
+           ramRW : out STD_LOGIC; 
+           ramAddr : out STD_LOGIC_VECTOR(11 downto 0);
+           ramDataD : out STD_LOGIC_VECTOR(23 downto 0);
            aluRegA : out STD_LOGIC_VECTOR(23 downto 0);
            aluRegB : out STD_LOGIC_VECTOR(23 downto 0);
            aluOp : out STD_LOGIC_VECTOR(4 downto 0)
@@ -58,8 +62,8 @@ architecture Behavioral of ControlUnit is
 
     TYPE instructionState IS (RESET, FETCH, OP1, OP2, EXE);
     TYPE fetchState IS (setAddr, addrValid, dataValid, pcInc);
-    TYPE operandState IS (setRegA, getRegD, dummy1, dummy2);
-    TYPE executionState IS (opALU, aluRst, store);
+    TYPE operandState IS (setRegA, getRegD, ramAddrValid, ramDataValid);
+    TYPE executionState IS (opALU, aluRst, addrValid, store);
     signal iState : instructionState;
     signal fState : fetchState;
     signal opState : operandState;
@@ -98,7 +102,10 @@ begin
             iState <= RESET;
             fstate <= setAddr;
             opState <= setRegA;
-             
+            eState <= opALU; 
+            
+            
+            ramRW <= '0';
             -- set the program counter and instruction register to 0
             PC <= PC xor PC;
             IR <= IR xor IR;
@@ -106,9 +113,11 @@ begin
         elsif (rising_edge(clk)) then
             case iState is 
                 when RESET => 
-                    iState <= FETCH; 
+                    iState <= FETCH;
+                    fState <= setAddr; 
                 when FETCH => 
                     exeOut <= "00";
+                    opState <= setRegA;
                     case fstate is 
                         when setAddr => 
                             progmemAddr <= PC; 
@@ -123,7 +132,6 @@ begin
                         when pcInc => 
                             PC <= PC + 1;
                             fstate <= setAddr;
-                            opState <= setRegA; 
                             case numOps is 
                                 when "00" => 
                                     iState <= EXE;
@@ -140,72 +148,104 @@ begin
                     -- end fetch 
                 when OP1 =>
                     exeOut <= "01";
+                    eState <= opAlu; 
                     case opState is 
                         when setRegA => 
                             regAddr <= op1Val; 
                             opState <= getRegD;
+                            -- get the immediate
+                            --      this will be overwriten if there are two ops
+                            opB <= (others => imm14(13));
+                            opB(13 downto 0) <= imm14; 
+                            
                         when getRegD => 
-                            opA <= regDataQ;
-                            opState <= dummy1;
+                            if (op1AM(0) = '1') then -- register indirect  
+                                ramAddr <= regDataQ(11 downto 0); 
+                                opState <= ramAddrValid; 
+                            else -- register direct
+                                opA <= regDataQ; 
+                                case numOps is 
+                                when "01" => 
+                                        iState <= EXE;
+                                    when "10" => 
+                                        iState <= OP2;
+                                        opState <= setRegA; 
+                                    when others => 
+                                        iState <= FETCH; 
+                               end case;
+                            end if;
                         -- todo add addressing mode here
-                        when dummy1 => 
-                            opState <= dummy2;
-                        when dummy2 => 
+                        when ramAddrValid => 
+                            opState <= ramDataValid;
+                        when ramDataValid => 
                             opState <= setRegA;
+                            opA <= ramDataQ;
                             case numOps is 
                                 when "01" => 
                                     iState <= EXE;
-                                    -- opB get the sign extended immediate
-                                    opB <= (others => imm14(13));
-                                    opB(13 downto 0) <= imm14; 
                                 when "10" => 
                                     iState <= OP2;
                                 when others => 
                                     iState <= FETCH; 
                             end case;
-                            eState <= opALU; 
                     end case;
                     -- end OP1
                 when OP2 => 
-                    exeOut <= "10";case opState is 
+                    exeOut <= "10";
+                    case opState is 
                         when setRegA => 
                             regAddr <= op2Val; 
                             opState <= getRegD;
                         when getRegD => 
-                            opB <= regDataQ;
-                            opState <= dummy1;
+                            if (op2AM(0) = '1') then -- register indirect  
+                                ramAddr <= regDataQ(11 downto 0); 
+                                opState <= ramAddrValid; 
+                            else -- register direct
+                                opB <= regDataQ; 
+                                iState <= EXE;
+                            end if;
                         -- todo add addressing mode here
-                        when dummy1 => 
-                            opState <= dummy2;
-                        when dummy2 => 
+                        when ramAddrValid => 
+                            opState <= ramDataValid;
+                        when ramDataValid => 
                             opState <= setRegA;
-                            -- likely unnessiary 
-                            case numOps is 
-                                when "10" => 
-                                    iState <= EXE;
-                                when others => 
-                                    iState <= FETCH;
-                            end case;
-                    end case;
+                            opB <= ramDataQ; 
+                            iState <= EXE;
+                    end case; 
                     -- end OP2
                 when EXE =>
                     exeOut <= "11";
+                    fState <= setAddr; 
                     --case opType is 
                       --  when OP_OP => 
                             case eState is
-                                when opALU => 
+                                when opALU =>
+                                    regAddr <= OP1Val;
                                     aluOp <= opCode; 
                                     aluRegA <= opA;
                                     aluRegB <= opB;
                                     eState <= aluRst;
-                                when aluRst => 
-                                    regDataD <= aluRegR;
-                                    regAddr <= OP1Val;
-                                    regClk <= '0';
+                                when aluRst =>
+                                    if (op1AM(0) = '1') then -- register indirect 
+                                        ramAddr <= regDataQ(11 downto 0);
+                                        ramDataD <= aluRegR;
+                                    else 
+                                        regDataD <= aluRegR;
+                                        regClk <= '0';
+                                    end if;
+                                    eState <= addrValid;
+                                when addrValid => 
+                                    if (op1AM(0) = '1') then -- register indirect 
+                                        ramRW <= '1';
+                                    else 
+                                        regClk <= '1';
+                                    end if;
                                     eState <= store;
                                 when store => 
-                                    regClk <= '1';
-                                    iState <= FETCH; 
+                                    ramRW <= '0';
+                                    regClk <= '0';
+                                    iState <= FETCH;
+                                    eState <= opALU; 
                             end case;
                                 
                     

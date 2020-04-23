@@ -43,8 +43,11 @@ read_vhdl -library xil_defaultlib {
   C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd
   C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd
   C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd
-  C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/instructionDecoder.vhd
+  C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd
 }
+read_ip -quiet c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam.xci
+set_property used_in_implementation false [get_files -all c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam_ooc.xdc]
+
 read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
 set_property used_in_implementation false [get_files -all c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_ooc.xdc]
 

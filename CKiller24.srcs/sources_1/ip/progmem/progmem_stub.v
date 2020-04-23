@@ -1,7 +1,7 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Wed Apr 22 18:23:42 2020
+// Date        : Wed Apr 22 22:56:07 2020
 // Host        : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
 //               C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_stub.v
