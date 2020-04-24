@@ -27,7 +27,7 @@ entity CKiller24 is
 	Port (clk100M : in STD_LOGIC;  	
 	      clk : in STD_LOGIC;
 		  rst: in STD_LOGIC;
-		  sel: in STD_LOGIC;
+		  sel: in STD_LOGIC_VECTOR(1 downto 0);
 		  AN : out STD_LOGIC_VECTOR (7 downto 0);
           CA : out STD_LOGIC_VECTOR (6 downto 0);
           exeState : out STD_LOGIC_VECTOR(1 downto 0);
@@ -53,12 +53,19 @@ architecture Behavioral of CKiller24 is
     
     signal aluA, aluB, aluR: std_logic_vector(23 downto 0);
     signal aluOp : std_logic_vector(4 downto 0);
+    
+    signal ramA : std_logic_vector(11 downto 0);
+    signal ramD : std_logic_vector(23 downto 0);
+    signal ramQ : std_logic_vector(23 downto 0);
+    signal ramRW : std_logic; 
   
 begin
 	rf: entity RegisterFile PORT MAP (clk => regFileC, addr => regFileA,
 	d => regFileD, q => regFileQ);
 	
 	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR);
+    
+    mu: entity MMU PORT MAP(clk => clk, rst => rst, addr => ramA, dataIn => ramD, dataOut => ramQ, readWrite => ramRW);
 
     cu: entity ControlUnit PORT MAP(clk => clk, rst => rst, 
         irOut => ir, exeout => exeState,pcOut => PC, 
@@ -66,6 +73,10 @@ begin
         regAddr => regFileA,
         regDataD => regFileD,
         regDataQ => regFileQ,
+        ramAddr => ramA,
+        ramDataD => ramD,
+        ramDataQ => ramQ,
+        ramRW => ramRW, 
         aluRegA => aluA,
         aluRegB => aluB,
         aluop => op,
@@ -76,7 +87,10 @@ begin
            data => display, latch => clkDiv(19), 
            AN => AN, CA => CA);
     
-    display <= (X"00" & regFileD) when sel = '1' else (PC(7 downto 0) & IR); 
+    with sel select display <= 
+        X"00" & regFileQ when "01",
+        ramA(7 downto 0) & ramQ when "10",
+        PC(7 downto 0) & IR when others; 
     
     process(clk100M)
     begin 
