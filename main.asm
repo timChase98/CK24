@@ -1,9 +1,8 @@
 CLR R1
 CLR R2
-ADDI R2, 10
+ADDI R2, 0xAA
 LOOP:
-     add R1, R2
-     dec R2
+     SLL R2
      BRZ DONE
      JMPI LOOP
 DONE:

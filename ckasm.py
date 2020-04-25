@@ -39,7 +39,14 @@ def instructionToBin24(line, PC):
         if len(op.split(",")) != 2:
             raise Exception("Wrong number of Arguments for " + instruction)
         instructionString += decodeArgToAddrMode(op.split(",")[0])
-        instructionString += "{0:014b}".format(int(op.split(",")[1]))
+        imm = op.split(',')[1]
+        if "0X" in imm:
+            imm = int(imm, 16)
+        elif "0B" in imm:
+            imm = int(imm, 2)
+        else:
+            imm = int(imm)
+        instructionString += "{0:014b}".format(imm)
     elif opType == "2":
         if len(op.split(",")) != 2:
             raise Exception("Wrong number of Arguments for " + instruction)

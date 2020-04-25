@@ -45,20 +45,24 @@ end ALU;
 architecture Behavioral of ALU is
     signal Ase, Bse : std_logic_vector(24 downto 0);
     signal result : std_logic_vector(24 downto 0);
+    signal mul : std_logic_vector(47 downto 0);
 begin
     -- sign extend A and B to 25 bits to preserve the carry bit
     Ase <= A(23) & A;
     bSe <= B(23) & B;
+    
+    mul <= a * b;
+    
     with op select result <= 
         (others => '0')           when "00100", -- CLR 
         Ase + 1               when "00101", -- INC 
         Ase - 1               when "00110", -- DEC
         (not Ase) + 1         when "00111", -- NEG
-        --SHIFT_LEFT(A, B)    when "01000", -- SLL
-        --SHIFT_RIGHT(A, B)   when "01001", -- SLL
+        std_logic_vector(SHIFT_LEFT(unsigned(Ase), to_integer(unsigned(Bse))))    when "01000", -- SLL
+        std_logic_vector(SHIFT_RIGHT(unsigned(Ase), to_integer(unsigned(Bse))))   when "01001", -- SRL
         Ase + Bse               when "10000", -- ADD
         Ase - Bse               when "10001", -- SUB
-        -- mult             when "10010", -- mul
+        mul(24 downto 0)             when "10010", -- mul
         -- divide           when "10011", -- DIV
         Ase and Bse             when "10100", -- AND
         Ase or Bse              when "10101", -- OR
