@@ -30,15 +30,19 @@ entity ControlUnit is
            regDataQ : in STD_LOGIC_VECTOR(23 downto 0);
            ramDataQ : in STD_LOGIC_VECTOR(23 downto 0);
            aluRegR : in STD_LOGIC_VECTOR(23 downto 0);
+           aluRegS : in STD_LOGIC_VECTOR(3 downto 0);
            irOut : out STD_LOGIC_VECTOR(23 downto 0);
            pcOut : out STD_LOGIC_VECTOR(15 downto 0);
            exeOut : out std_logic_vector(1 downto 0);
            regClk : out std_logic;
            regAddr : out STD_LOGIC_VECTOR(2 downto 0);
            regDataD : out STD_LOGIC_VECTOR(23 downto 0);
+           regInc : out STD_LOGIC;
            ramRW : out STD_LOGIC; 
            ramAddr : out STD_LOGIC_VECTOR(11 downto 0);
            ramDataD : out STD_LOGIC_VECTOR(23 downto 0);
+           aluSLatch : out STD_LOGIC;
+           aluSRst : out STD_LOGIC; 
            aluRegA : out STD_LOGIC_VECTOR(23 downto 0);
            aluRegB : out STD_LOGIC_VECTOR(23 downto 0);
            aluOp : out STD_LOGIC_VECTOR(4 downto 0)
@@ -50,13 +54,9 @@ architecture Behavioral of ControlUnit is
     component progmem is
         PORT (
             clka : IN STD_LOGIC;
-            rsta : IN STD_LOGIC;
             ena : IN STD_LOGIC;
-            wea : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
             addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-            dina : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
-            douta : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
-            rsta_busy : OUT STD_LOGIC
+            douta : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
       );
     end component; 
 
@@ -69,7 +69,7 @@ architecture Behavioral of ControlUnit is
     signal opState : operandState;
     signal eState : executionState; 
     
-    TYPE opTypes IS (NONE, OP_NONE, OP_OP, BR, JMP);
+    TYPE opTypes IS (NONE, OP_OP, BR, JMP);
             
     signal PC : std_logic_vector(15 downto 0);
     signal IR : std_logic_vector(23 downto 0);
@@ -107,20 +107,19 @@ begin
             
             ramRW <= '0';
             -- set the program counter and instruction register to 0
-            PC <= PC xor PC;
-            IR <= IR xor IR;
+            PC <= (others => '0');
+            IR <= (others => '0');
             
         elsif (rising_edge(clk)) then
             case iState is 
                 when RESET => 
                     iState <= FETCH;
-                    fState <= setAddr; 
+                    fState <= setAddr;
                 when FETCH => 
                     exeOut <= "00";
                     opState <= setRegA;
                     case fstate is 
-                        when setAddr => 
-                            progmemAddr <= PC; 
+                        when setAddr =>
                             fstate <= addrValid;
                         when addrValid => 
                             -- one clock propegation from addresss valid 
@@ -134,13 +133,13 @@ begin
                             fstate <= setAddr;
                             case numOps is 
                                 when "00" => 
-                                    iState <= EXE;
+                                    iState <= FETCH;
                                 when "01" => 
                                     iState <= OP1;
                                 when "10" => 
                                     iState <= OP1;
                                 when "11" => 
-                                    iState <= FETCH;
+                                    iState <= EXE;
                                 when others => 
                                     iState <= FETCH; 
                             end case;
@@ -216,8 +215,8 @@ begin
                 when EXE =>
                     exeOut <= "11";
                     fState <= setAddr; 
-                    --case opType is 
-                      --  when OP_OP => 
+                    case opType is 
+                        when OP_OP => 
                             case eState is
                                 when opALU =>
                                     regAddr <= OP1Val;
@@ -226,6 +225,7 @@ begin
                                     aluRegB <= opB;
                                     eState <= aluRst;
                                 when aluRst =>
+                                    aluSLatch <= '1';
                                     if (op1AM(0) = '1') then -- register indirect 
                                         ramAddr <= regDataQ(11 downto 0);
                                         ramDataD <= aluRegR;
@@ -234,7 +234,8 @@ begin
                                         regClk <= '0';
                                     end if;
                                     eState <= addrValid;
-                                when addrValid => 
+                                when addrValid =>
+                                    aluSLatch <= '0';
                                     if (op1AM(0) = '1') then -- register indirect 
                                         ramRW <= '1';
                                     else 
@@ -248,10 +249,17 @@ begin
                                     eState <= opALU; 
                             end case;
                                 
-                    
-                      --  when others => 
-                        --    iState <= FETCH;
-                    --end case;
+                        when BR =>
+                            if ((aluRegS and mask) = mask) then 
+                                pc <= '0' & IMM15;
+                            end if;
+                            iState <= FETCH;
+                        when JMP => 
+                            PC <= '0' & IMM15;
+                            iState <= FETCH;
+                        when others => 
+                            iState <= FETCH;
+                    end case;
                     
                     -- end EXE
                 when others => 
@@ -260,10 +268,11 @@ begin
         end if;
     end process;
     
-    pm :  progmem PORT MAP (addra => progmemAddr, clka => clk, dina => X"000000",
-    douta => progmemData, ena => '1', rsta => rst, Wea => "0");
+    pm :  progmem PORT MAP (addra => progmemAddr, clka => clk, 
+    douta => progmemData, ena => '1');
     irOut <= IR; 
     pcOut <= PC;
+    progmemAddr <= PC; 
     
     
     OPCode <= IR(23 downto 19);
@@ -316,10 +325,10 @@ begin
         NONE when "00001", -- wait
         NONE when "00010", -- reset
         NONE when "00011", -- blmr
-        OP_NONE when "00100", -- clr
-        OP_NONE when "00101", -- inc
-        OP_NONE when "00110", -- dec
-        OP_NONE when "00111", -- neg
+        OP_OP when "00100", -- clr
+        OP_OP when "00101", -- inc
+        OP_OP when "00110", -- dec
+        OP_OP when "00111", -- neg
         OP_OP when "01000", -- sll
         OP_OP when "01001", -- srl
         OP_OP when "01010", -- mvs
@@ -340,7 +349,7 @@ begin
         JMP when "11001", -- jmpi
         JMP when "11010", -- jsr
         JMP when "11011", -- rsr
-        JMP when "11100", -- br
+        BR when "11100", -- br
         NONE when "11101", -- inttgl
         NONE when "11110", -- rti
         NONE when "11111"; -- clrs

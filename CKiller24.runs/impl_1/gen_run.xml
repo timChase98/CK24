@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1587610986">
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1587777419">
   <File Type="BITSTR-BMM" Name="CKiller24_bd.bmm"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="CKiller24_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="CKiller24_timing_summary_init.rpt"/>
@@ -175,9 +175,7 @@
     </Config>
   </FileSet>
   <Strategy Version="1" Minor="2">
-    <StratHandle Name="Flow_RuntimeOptimized" Flow="Vivado Implementation 2019">
-      <Desc>Each implementation step trades design performance for better runtime. Physical optimization (phys_opt_design) is disabled.</Desc>
-    </StratHandle>
+    <StratHandle Name="Flow_RuntimeOptimized" Flow="Vivado Implementation 2019"/>
     <Step Id="init_design"/>
     <Step Id="opt_design">
       <Option Id="Directive">4</Option>

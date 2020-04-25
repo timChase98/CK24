@@ -31,7 +31,9 @@ entity CKiller24 is
 		  AN : out STD_LOGIC_VECTOR (7 downto 0);
           CA : out STD_LOGIC_VECTOR (6 downto 0);
           exeState : out STD_LOGIC_VECTOR(1 downto 0);
-          rfa : out STD_LOGIC_VECTOR(2 downto 0)
+          rfa : out STD_LOGIC_VECTOR(2 downto 0);
+          as : out STD_LOGIC_VECTOR(3 downto 0);
+          asn : out STD_LOGIC_VECTOR(3 downto 0)
 	);
 end CKiller24;
 
@@ -50,9 +52,12 @@ architecture Behavioral of CKiller24 is
     signal regFileD : std_logic_vector(23 downto 0);
     signal regFileQ : std_logic_vector(23 downto 0);
     signal regFileC : std_logic; 
+    signal regFileI : std_logic;
     
     signal aluA, aluB, aluR: std_logic_vector(23 downto 0);
     signal aluOp : std_logic_vector(4 downto 0);
+    signal aluS : std_logic_vector(3 downto 0);
+    signal aluSR, aluSL : std_logic;
     
     signal ramA : std_logic_vector(11 downto 0);
     signal ramD : std_logic_vector(23 downto 0);
@@ -61,9 +66,9 @@ architecture Behavioral of CKiller24 is
   
 begin
 	rf: entity RegisterFile PORT MAP (clk => regFileC, addr => regFileA,
-	d => regFileD, q => regFileQ);
+	d => regFileD, q => regFileQ, inc => regFileI);
 	
-	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR);
+	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR, s => aluS, sLatch => aluSL, sRst => aluSR);
     
     mu: entity MMU PORT MAP(clk => clk, rst => rst, addr => ramA, dataIn => ramD, dataOut => ramQ, readWrite => ramRW);
 
@@ -73,6 +78,7 @@ begin
         regAddr => regFileA,
         regDataD => regFileD,
         regDataQ => regFileQ,
+        regInc => regFileI,
         ramAddr => ramA,
         ramDataD => ramD,
         ramDataQ => ramQ,
@@ -80,7 +86,10 @@ begin
         aluRegA => aluA,
         aluRegB => aluB,
         aluop => op,
-        aluRegR => aluR
+        aluRegR => aluR,
+        aluRegS => aluS,
+        aluSLatch => aluSL,
+        aluSRst => aluSR
         );
         
     dp: entity SevenSegmentDigitController PORT MAP (pxlClk => clkDiv(17),
@@ -100,6 +109,8 @@ begin
     end process;
     
     rfa <= RegFileA;
+    as <= aluS;
+    asn <= not aluS;
     
 
 end Behavioral;

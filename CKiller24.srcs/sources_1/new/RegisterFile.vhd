@@ -35,6 +35,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity RegisterFile is
     Port ( addr : in STD_LOGIC_VECTOR (2 downto 0);
            clk : in STD_LOGIC;
+           inc : in STD_LOGIC;
            d : in STD_LOGIC_VECTOR (23 downto 0);
            q : out STD_LOGIC_VECTOR (23 downto 0));
 end RegisterFile;
@@ -46,14 +47,14 @@ architecture Behavioral of RegisterFile is
 begin
     ad : entity DEC8_1 PORT MAP (a => addr, en => '1', d => addressDecoder);    
 
-    r0 : entity Reg PORT MAP(d => d, q => registers(0), en => addressDecoder(0), clk => clk);
-    r1 : entity Reg PORT MAP(d => d, q => registers(1), en => addressDecoder(1), clk => clk);
-    r2 : entity Reg PORT MAP(d => d, q => registers(2), en => addressDecoder(2), clk => clk);
-    r3 : entity Reg PORT MAP(d => d, q => registers(3), en => addressDecoder(3), clk => clk);
-    r4 : entity Reg PORT MAP(d => d, q => registers(4), en => addressDecoder(4), clk => clk);
-    r5 : entity Reg PORT MAP(d => d, q => registers(5), en => addressDecoder(5), clk => clk);
-    r6 : entity Reg PORT MAP(d => d, q => registers(6), en => addressDecoder(6), clk => clk);
-    sp : entity Reg PORT MAP(d => d, q => registers(7), en => addressDecoder(7), clk => clk);
+    r0 : entity Reg PORT MAP(d => d, q => registers(0), en => addressDecoder(0), clk => clk, inc => inc);
+    r1 : entity Reg PORT MAP(d => d, q => registers(1), en => addressDecoder(1), clk => clk, inc => inc);
+    r2 : entity Reg PORT MAP(d => d, q => registers(2), en => addressDecoder(2), clk => clk, inc => inc);
+    r3 : entity Reg PORT MAP(d => d, q => registers(3), en => addressDecoder(3), clk => clk, inc => inc);
+    r4 : entity Reg PORT MAP(d => d, q => registers(4), en => addressDecoder(4), clk => clk, inc => inc);
+    r5 : entity Reg PORT MAP(d => d, q => registers(5), en => addressDecoder(5), clk => clk, inc => inc);
+    r6 : entity Reg PORT MAP(d => d, q => registers(6), en => addressDecoder(6), clk => clk, inc => inc);
+    sp : entity Reg PORT MAP(d => d, q => registers(7), en => addressDecoder(7), clk => clk, inc => inc);
 
     q <= registers(to_integer(unsigned(addr)));
 
