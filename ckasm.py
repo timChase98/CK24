@@ -100,7 +100,7 @@ if __name__ == '__main__':
 			if label in labels:
 				labels[label][0] = lineCounter
 			else:
-				labels[label] = [lineCounter, []]
+				labels[label] = [programCounter, []]
 
 		if ";" in line: # remove comments
 			line, comment = line.split(";", 1)
