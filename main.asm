@@ -2,7 +2,7 @@ CLR R1
 CLR R2
 ADDI R2, 0xAA
 LOOP:
-     SLL R2
+     SRL R2, 1
      BRZ DONE
      JMPI LOOP
 DONE:

@@ -114,10 +114,10 @@ if __name__ == '__main__':
 		try:
 			decoded= instructionToBin24(line, programCounter)
 			program.append(decoded)
-			programCounter += 1
 		except Exception as e:
 			sys.exit(colored(str(e) + " @line " + str(lineCounter), "red"))
-		out.append("{0}:\t{1:15}\t0b{2:024b}\t0x{3:06X}".format(lineCounter, line, decoded, decoded))
+		out.append("{0}:\t{1:15}\t0b{2:024b}\t0x{3:06X}".format(programCounter, line, decoded, decoded))
+		programCounter += 1
 
 	# go back and fix mixing labels
 	for label in labels.keys():
