@@ -3,8 +3,6 @@
   <File Type="PA-TCL" Name="dataRam.tcl"/>
   <File Type="REPORTS-TCL" Name="dataRam_reports.tcl"/>
   <File Type="RDS-RDS" Name="dataRam.vds"/>
-  <File Type="RDS-UTIL" Name="dataRam_utilization_synth.rpt"/>
-  <File Type="RDS-UTIL-PB" Name="dataRam_utilization_synth.pb"/>
   <File Type="RDS-DCP" Name="dataRam.dcp"/>
   <FileSet Name="sources" Type="BlockSrcs" RelSrcDir="$PSRCDIR/dataRam">
     <File Path="$PSRCDIR/sources_1/ip/dataRam/dataRam.xci">

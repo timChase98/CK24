@@ -37,6 +37,7 @@ entity RegisterFile is
            clk : in STD_LOGIC;
            en : in STD_LOGIC;
            inc : in STD_LOGIC;
+           dec : in STD_LOGIC;
            d : in STD_LOGIC_VECTOR (23 downto 0);
            q : out STD_LOGIC_VECTOR (23 downto 0));
 end RegisterFile;
@@ -48,14 +49,14 @@ architecture Behavioral of RegisterFile is
 begin
     ad : entity DEC8_1 PORT MAP (a => addr, en => en, d => addressDecoder);    
 
-    r0 : entity Reg PORT MAP(d => d, q => registers(0), en => addressDecoder(0), clk => clk, inc => inc);
-    r1 : entity Reg PORT MAP(d => d, q => registers(1), en => addressDecoder(1), clk => clk, inc => inc);
-    r2 : entity Reg PORT MAP(d => d, q => registers(2), en => addressDecoder(2), clk => clk, inc => inc);
-    r3 : entity Reg PORT MAP(d => d, q => registers(3), en => addressDecoder(3), clk => clk, inc => inc);
-    r4 : entity Reg PORT MAP(d => d, q => registers(4), en => addressDecoder(4), clk => clk, inc => inc);
-    r5 : entity Reg PORT MAP(d => d, q => registers(5), en => addressDecoder(5), clk => clk, inc => inc);
-    r6 : entity Reg PORT MAP(d => d, q => registers(6), en => addressDecoder(6), clk => clk, inc => inc);
-    sp : entity Reg PORT MAP(d => d, q => registers(7), en => addressDecoder(7), clk => clk, inc => inc);
+    r0 : entity Reg PORT MAP(d => d, q => registers(0), en => addressDecoder(0), clk => clk, inc => inc, dec => dec);
+    r1 : entity Reg PORT MAP(d => d, q => registers(1), en => addressDecoder(1), clk => clk, inc => inc, dec => dec);
+    r2 : entity Reg PORT MAP(d => d, q => registers(2), en => addressDecoder(2), clk => clk, inc => inc, dec => dec);
+    r3 : entity Reg PORT MAP(d => d, q => registers(3), en => addressDecoder(3), clk => clk, inc => inc, dec => dec);
+    r4 : entity Reg PORT MAP(d => d, q => registers(4), en => addressDecoder(4), clk => clk, inc => inc, dec => dec);
+    r5 : entity Reg PORT MAP(d => d, q => registers(5), en => addressDecoder(5), clk => clk, inc => inc, dec => dec);
+    r6 : entity Reg PORT MAP(d => d, q => registers(6), en => addressDecoder(6), clk => clk, inc => inc, dec => dec);
+    sp : entity Reg PORT MAP(d => d, q => registers(7), en => addressDecoder(7), clk => clk, inc => inc, dec => dec);
 
     q <= registers(to_integer(unsigned(addr)));
 

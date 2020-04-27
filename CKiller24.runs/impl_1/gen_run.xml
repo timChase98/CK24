@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1587832665">
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1588015726">
   <File Type="BITSTR-BMM" Name="CKiller24_bd.bmm"/>
   <File Type="OPT-METHODOLOGY-DRC" Name="CKiller24_methodology_drc_opted.rpt"/>
   <File Type="INIT-TIMING" Name="CKiller24_timing_summary_init.rpt"/>
