@@ -33,7 +33,8 @@ entity CKiller24 is
           exeState : out STD_LOGIC_VECTOR(1 downto 0);
           rfa : out STD_LOGIC_VECTOR(2 downto 0);
           as : out STD_LOGIC_VECTOR(3 downto 0);
-          asn : out STD_LOGIC_VECTOR(3 downto 0)
+          asn : out STD_LOGIC_VECTOR(3 downto 0);
+          rfi : out STD_LOGIC
 	);
 end CKiller24;
 
@@ -51,7 +52,7 @@ architecture Behavioral of CKiller24 is
     signal regFileA : std_logic_vector(2 downto 0);
     signal regFileD : std_logic_vector(23 downto 0);
     signal regFileQ : std_logic_vector(23 downto 0);
-    signal regFileC : std_logic; 
+    signal regFileE : std_logic; 
     signal regFileI : std_logic;
     
     signal aluA, aluB, aluR: std_logic_vector(23 downto 0);
@@ -65,8 +66,8 @@ architecture Behavioral of CKiller24 is
     signal ramRW : std_logic; 
   
 begin
-	rf: entity RegisterFile PORT MAP (clk => regFileC, addr => regFileA,
-	d => regFileD, q => regFileQ, inc => regFileI);
+	rf: entity RegisterFile PORT MAP (clk => clk, addr => regFileA,
+	d => regFileD, q => regFileQ, inc => regFileI, en => regFileE);
 	
 	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR, s => aluS, sLatch => aluSL, sRst => aluSR);
     
@@ -74,7 +75,7 @@ begin
 
     cu: entity ControlUnit PORT MAP(clk => clk, rst => rst, 
         irOut => ir, exeout => exeState,pcOut => PC, 
-        regClk => regFileC,
+        regEn => regFileE,
         regAddr => regFileA,
         regDataD => regFileD,
         regDataQ => regFileQ,
@@ -111,6 +112,7 @@ begin
     rfa <= RegFileA;
     as <= aluS;
     asn <= not aluS;
+    rfi <= regFileI; 
     
 
 end Behavioral;

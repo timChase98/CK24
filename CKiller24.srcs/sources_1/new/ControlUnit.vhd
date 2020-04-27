@@ -34,7 +34,7 @@ entity ControlUnit is
            irOut : out STD_LOGIC_VECTOR(23 downto 0);
            pcOut : out STD_LOGIC_VECTOR(15 downto 0);
            exeOut : out std_logic_vector(1 downto 0);
-           regClk : out std_logic;
+           regEn : out std_logic;
            regAddr : out STD_LOGIC_VECTOR(2 downto 0);
            regDataD : out STD_LOGIC_VECTOR(23 downto 0);
            regInc : out STD_LOGIC;
@@ -69,7 +69,7 @@ architecture Behavioral of ControlUnit is
     signal opState : operandState;
     signal eState : executionState; 
     
-    TYPE opTypes IS (NONE, OP_OP, BR, JMP);
+    TYPE opTypes IS (NONE, OP_OP, BR, JMP, MV);
             
     signal PC : std_logic_vector(15 downto 0);
     signal IR : std_logic_vector(23 downto 0);
@@ -116,18 +116,36 @@ begin
                     iState <= FETCH;
                     fState <= setAddr;
                 when FETCH => 
+                    -- also handles post increment for register file addressing mode
                     exeOut <= "00";
                     opState <= setRegA;
                     case fstate is 
                         when setAddr =>
                             fstate <= addrValid;
+                            if (OP1AM(1) = '1') then
+                                regAddr <= OP1VAL;
+                                regInc <= '1';
+                                regEn <= '1';
+                            end if;
                         when addrValid => 
                             -- one clock propegation from addresss valid 
                             --      to data valid 
                             fstate <= dataValid;
+                            
+                            if (OP2AM(1) = '1') then
+                                regAddr <= OP2VAL;
+                            else 
+                                regInc <= '0';
+                                regEn <= '0';
+                            end if;
+                            
+                            
                         when dataValid => 
                             IR <= progmemData; 
                             fstate <= pcInc;
+                            
+                            regInc <= '0';
+                            regEn <= '0';
                         when pcInc => 
                             PC <= PC + 1;
                             fstate <= setAddr;
@@ -231,7 +249,7 @@ begin
                                         ramDataD <= aluRegR;
                                     else 
                                         regDataD <= aluRegR;
-                                        regClk <= '0';
+                                        regEn <= '0';
                                     end if;
                                     eState <= addrValid;
                                 when addrValid =>
@@ -239,12 +257,12 @@ begin
                                     if (op1AM(0) = '1') then -- register indirect 
                                         ramRW <= '1';
                                     else 
-                                        regClk <= '1';
+                                        regEn <= '1';
                                     end if;
                                     eState <= store;
                                 when store => 
                                     ramRW <= '0';
-                                    regClk <= '0';
+                                    regEn <= '0';
                                     iState <= FETCH;
                                     eState <= opALU; 
                             end case;
@@ -331,7 +349,7 @@ begin
         OP_OP when "00111", -- neg
         OP_OP when "01000", -- sll
         OP_OP when "01001", -- srl
-        OP_OP when "01010", -- mvs
+        MV when "01010", -- mvs
         NONE when "01011", -- mvmi
         NONE when "01100", -- msm
         NONE when "01101", -- mms
