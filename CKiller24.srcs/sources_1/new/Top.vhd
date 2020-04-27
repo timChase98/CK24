@@ -53,7 +53,8 @@ architecture Behavioral of CKiller24 is
     signal regFileD : std_logic_vector(23 downto 0);
     signal regFileQ : std_logic_vector(23 downto 0);
     signal regFileE : std_logic; 
-    signal regFileI : std_logic;
+    signal regFileI : std_logic; 
+    signal regFileDec : std_logic;
     
     signal aluA, aluB, aluR: std_logic_vector(23 downto 0);
     signal aluOp : std_logic_vector(4 downto 0);
@@ -67,7 +68,7 @@ architecture Behavioral of CKiller24 is
   
 begin
 	rf: entity RegisterFile PORT MAP (clk => clk, addr => regFileA,
-	d => regFileD, q => regFileQ, inc => regFileI, en => regFileE);
+	d => regFileD, q => regFileQ, inc => regFileI, en => regFileE, dec => regFileDec);
 	
 	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR, s => aluS, sLatch => aluSL, sRst => aluSR);
     
@@ -80,6 +81,7 @@ begin
         regDataD => regFileD,
         regDataQ => regFileQ,
         regInc => regFileI,
+        regDec => regFileDec,
         ramAddr => ramA,
         ramDataD => ramD,
         ramDataQ => ramQ,

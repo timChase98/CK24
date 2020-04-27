@@ -36,18 +36,21 @@ entity Reg is
            clk : in STD_LOGIC;
            en : in STD_LOGIC;
            inc : in STD_LOGIC;
+           dec : in STD_LOGIC;
            q : out STD_LOGIC_VECTOR (23 downto 0));
 end Reg;
 
 architecture Behavioral of Reg is
     signal qInternal : std_logic_vector(23 downto 0);
 begin
-    process(clk)
+    process(clk, en)
     begin 
         if(rising_edge(clk) and en='1') then 
             if(inc = '1') then
                 qInternal <= qInternal + 1;
-            else  
+            elsif (dec = '1') then 
+                qInternal <= qInternal - 1;
+            else
                 qInternal <= d;
             end if;
         end if;
