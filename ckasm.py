@@ -63,9 +63,10 @@ def instructionToBin24(line, PC):
 	return int(instructionString, 2)
 
 def decodeArgToAddrMode(op):
+	inc = "1" if "+" in op else "0"
 	if "(" in op:
-		return "01{0:03b}".format(int(op.strip()[2]))
-	return "00{0:03b}".format(int(op.strip()[1]))
+		return "{0}1{1:03b}".format(inc, int(op.strip()[2]))
+	return "{0}0{1:03b}".format(inc, int(op.strip()[1]))
 
 def labelToProgramCounterIMM(label, currentPC):
 	if label in labels:
@@ -98,7 +99,7 @@ if __name__ == '__main__':
 			if not label:
 				sys.exit(colored("Missing Label Text @line " + str(lineCounter), "red"))
 			if label in labels:
-				labels[label][0] = lineCounter
+				labels[label][0] = programCounter
 			else:
 				labels[label] = [programCounter, []]
 

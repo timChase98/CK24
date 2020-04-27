@@ -1,9 +1,13 @@
+; init stack
+CLR R7
+ADDI R7, 0xFF
+; code
 CLR R1
-CLR R2
-ADDI R2, 0xAA
-LOOP:
-     SRL R2, 1
-     BRZ DONE
-     JMPI LOOP
-DONE:
-     HALT
+ADDI R1, 0xA0
+loop:
+	MVS (R2), R1
+	JSR foo
+	JMPI loop
+foo:
+	inc R1
+	RSR
