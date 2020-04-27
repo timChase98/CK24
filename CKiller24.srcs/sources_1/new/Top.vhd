@@ -65,6 +65,7 @@ architecture Behavioral of CKiller24 is
     signal ramD : std_logic_vector(23 downto 0);
     signal ramQ : std_logic_vector(23 downto 0);
     signal ramRW : std_logic; 
+    signal ramDn : std_logic;
   
 begin
 	rf: entity RegisterFile PORT MAP (clk => clk, addr => regFileA,
@@ -72,7 +73,7 @@ begin
 	
 	au: entity ALU PORT MAP(a => aluA, b => aluB, op => op, r=> aluR, s => aluS, sLatch => aluSL, sRst => aluSR);
     
-    mu: entity MMU PORT MAP(clk => clk, rst => rst, addr => ramA, dataIn => ramD, dataOut => ramQ, readWrite => ramRW);
+    mu: entity MMU PORT MAP(clk => clk, rst => rst, addr => ramA, dataIn => ramD, dataOut => ramQ, readWrite => ramRW, done => ramDn);
 
     cu: entity ControlUnit PORT MAP(clk => clk, rst => rst, 
         irOut => ir, exeout => exeState,pcOut => PC, 
@@ -85,7 +86,8 @@ begin
         ramAddr => ramA,
         ramDataD => ramD,
         ramDataQ => ramQ,
-        ramRW => ramRW, 
+        ramRW => ramRW,
+        ramDone => ramDn,
         aluRegA => aluA,
         aluRegB => aluB,
         aluop => op,

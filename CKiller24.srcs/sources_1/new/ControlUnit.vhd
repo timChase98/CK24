@@ -29,6 +29,7 @@ entity ControlUnit is
            rst : in STD_LOGIC;
            regDataQ : in STD_LOGIC_VECTOR(23 downto 0);
            ramDataQ : in STD_LOGIC_VECTOR(23 downto 0);
+           ramDone : in STD_LOGIC;
            aluRegR : in STD_LOGIC_VECTOR(23 downto 0);
            aluRegS : in STD_LOGIC_VECTOR(3 downto 0);
            irOut : out STD_LOGIC_VECTOR(23 downto 0);
@@ -144,8 +145,12 @@ begin
                             
                             
                         when dataValid => 
-                            IR <= progmemData; 
-                            fstate <= pcInc;
+                            IR <= progmemData;
+                            if(IR(23 downto 20) = X"0") then -- halt and wait
+                                fState <= dataValid;
+                            else
+                                fstate <= pcInc;
+                            end if;
                             
                             regInc <= '0';
                             regEn <= '0';
@@ -325,32 +330,35 @@ begin
                                     iState <= FETCH;
                             end case;
                         when MV =>
-                            case eState is
-                                when opALU =>
-                                    regAddr <= OP1Val;
-                                    eState <= aluRst;
-                                when aluRst =>
-                                    if (op1AM(0) = '1') then -- register indirect 
-                                        ramAddr <= regDataQ(11 downto 0);
-                                        ramDataD <= OPB;
-                                    else 
-                                        regDataD <= OPB;
-                                        regEn <= '0';
-                                    end if;
-                                    eState <= addrValid;
-                                when addrValid =>
-                                    aluSLatch <= '0';
-                                    if (op1AM(0) = '1') then -- register indirect 
-                                        ramRW <= '1';
-                                    else 
-                                        regEn <= '1';
-                                    end if;
-                                    eState <= store;
-                                when store => 
-                                    ramRW <= '0';
-                                    regEn <= '0';
-                                    iState <= FETCH;
-                                    eState <= opALU; 
+                            case OPCODE is
+                                when "01010" => -- MVS
+                                    case eState is
+                                        when opALU =>
+                                            regAddr <= OP1Val;
+                                            eState <= aluRst;
+                                        when aluRst =>
+                                            if (op1AM(0) = '1') then -- register indirect 
+                                                ramAddr <= regDataQ(11 downto 0);
+                                                ramDataD <= OPB;
+                                            else 
+                                                regDataD <= OPB;
+                                                regEn <= '0';
+                                            end if;
+                                            eState <= addrValid;
+                                        when addrValid =>
+                                            aluSLatch <= '0';
+                                            if (op1AM(0) = '1') then -- register indirect 
+                                                ramRW <= '1';
+                                            else 
+                                                regEn <= '1';
+                                            end if;
+                                            eState <= store;
+                                        when store => 
+                                            ramRW <= '0';
+                                            regEn <= '0';
+                                            iState <= FETCH;
+                                            eState <= opALU; 
+                                    end case;
                             end case;
                         when others => 
                             iState <= FETCH;
@@ -395,7 +403,7 @@ begin
         "10" when "01010", -- mvs
         "00" when "01011", -- mvmi
         "01" when "01100", -- msm
-        "01" when "01101", -- mms
+        "00" when "01101", -- mms
         "00" when "01110", -- blrm
         "00" when "01111", -- blmr
         "10" when "10000", -- add
@@ -428,8 +436,8 @@ begin
         OP_OP when "01001", -- srl
         MV when "01010", -- mvs
         NONE when "01011", -- mvmi
-        NONE when "01100", -- msm
-        NONE when "01101", -- mms
+        MV when "01100", -- msm
+        MV when "01101", -- mms
         NONE when "01110", -- blrm
         NONE when "01111", -- blmr
         OP_OP when "10000", -- add

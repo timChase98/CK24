@@ -37,7 +37,8 @@ entity MMU is
            readWrite : in STD_LOGIC;
            addr : in STD_LOGIC_VECTOR (11 downto 0);
            dataIn : in STD_LOGIC_VECTOR (23 downto 0);
-           dataOut : out STD_LOGIC_VECTOR (23 downto 0));
+           dataOut : out STD_LOGIC_VECTOR (23 downto 0);
+           done : out STD_LOGIC);
 end MMU;
 
 architecture Behavioral of MMU is
