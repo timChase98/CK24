@@ -95,6 +95,8 @@ architecture Behavioral of ControlUnit is
     signal opB : std_logic_vector(23 downto 0);
     signal result : std_logic_vector(23 downto 0);
 
+    signal allowPostInc : std_logic_vector(1 downto 0);
+    
 begin
 
     process(clk, rst)
@@ -124,7 +126,7 @@ begin
                     case fstate is
                         when setAddr =>
                             fstate <= addrValid;
-                            if (OP1AM(1) = '1') then
+                            if (OP1AM(1) = '1' and allowPostInc(0) = '1') then
                                 regAddr <= OP1VAL;
                                 regInc <= '1';
                                 regEn <= '1';
@@ -134,7 +136,7 @@ begin
                             --      to data valid
                             fstate <= dataValid;
 
-                            if (OP2AM(1) = '1') then
+                            if (OP2AM(1) = '1' and allowPostInc(1) = '1') then
                                 regAddr <= OP2VAL;
                                 regInc <= '1';
                                 regEn <= '1';
@@ -465,6 +467,40 @@ begin
         "11" when "11010", -- jsr
         "11" when "11011", -- rsr
         "11" when "11100", -- br
+        "00" when "11101", -- inttgl
+        "00" when "11110", -- rti
+        "00" when "11111"; -- clrs
+        
+    with opCode select allowPostInc <=
+        "00" when "00000", -- halt
+        "00" when "00001", -- wait
+        "00" when "00010", -- reset
+        "00" when "00011", -- blmr
+        "01" when "00100", -- clr
+        "01" when "00101", -- inc
+        "01" when "00110", -- dec
+        "01" when "00111", -- neg
+        "01" when "01000", -- sll
+        "01" when "01001", -- srl
+        "11" when "01010", -- mvs
+        "00" when "01011", -- mvmi
+        "01" when "01100", -- msm
+        "01" when "01101", -- mms
+        "00" when "01110", -- blrm
+        "00" when "01111", -- blmr
+        "11" when "10000", -- add
+        "11" when "10001", -- sub
+        "11" when "10010", -- mul
+        "11" when "10011", -- div
+        "11" when "10100", -- and
+        "11" when "10101", -- or
+        "11" when "10110", -- xor
+        "01" when "10111", -- addi
+        "01" when "11000", -- subi
+        "00" when "11001", -- jmpi
+        "00" when "11010", -- jsr
+        "00" when "11011", -- rsr
+        "00" when "11100", -- br
         "00" when "11101", -- inttgl
         "00" when "11110", -- rti
         "00" when "11111"; -- clrs
