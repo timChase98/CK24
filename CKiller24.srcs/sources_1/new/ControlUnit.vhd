@@ -159,7 +159,7 @@ begin
                             fstate <= setAddr;
                             case numOps is
                                 when "00" =>
-                                    iState <= FETCH;
+                                    iState <= EXE;
                                 when "01" =>
                                     iState <= OP1;
                                 when "10" =>
@@ -360,8 +360,8 @@ begin
                                             eState <= opALU;
                                     end case;
                                when "01011" => -- MVMI
-                                   iState => FETCH;
-                               when "01100" => -- MMS
+                                   iState <= FETCH;
+                               when "01101" => -- MMS
                                    case eState is
                                         when opALU =>
                                              -- read mem
@@ -369,10 +369,10 @@ begin
                                              regAddr <= OP1VAL;
                                              eState <= aluRst;
                                         when aluRst =>
-                                             eState <= addrValid
+                                             eState <= addrValid;
                                         when addrValid =>
-                                             if (OP1AM(0) = 1) then
-                                                  ramAddr <= regDataQ;
+                                             if (OP1AM(0) = '1') then
+                                                  ramAddr <= regDataQ(11 downto 0);
                                                   ramDataD <= ramDataQ;
                                                   ramRW <= '1';
                                              else
@@ -386,17 +386,20 @@ begin
                                             iState <= FETCH;
                                             eState <= opALU;
                                         when others =>
-                                             iState <= FETCH
+                                             iState <= FETCH;
                                    end case;
-                               when "01101" => -- MSM
+                               when "01100" => -- MSM
                                    case eState is
                                         when opALU =>
                                              ramAddr <= IMM14(11 downto 0);
                                              ramDataD <= OPA;
                                              ramRW <= '1';
                                              eState <= aluRst;
-                                        when others =>
+                                        when aluRst =>
                                             ramRW <= '0';
+                                            iState <= FETCH;
+                                            eState <= opALU;
+                                        when others =>
                                             iState <= FETCH;
                                             eState <= opALU;
                                    end case;
