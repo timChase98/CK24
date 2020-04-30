@@ -1,13 +1,6 @@
-; init stack
-CLR R7
-ADDI R7, 0xFF
-; code
 CLR R1
-ADDI R1, 0xA0
-loop:
-	MVS (R2), R1
-	JSR foo
-	JMPI loop
-foo:
-	inc R1
-	RSR
+CLR R2
+ADDI R2, 0xA0
+ADDI R2, 0x55
+MSM R1, 0x10
+MMS (R2+), 0x10
