@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Fri May  1 17:38:50 2020
+| Date         : Fri May  1 18:10:58 2020
 | Host         : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file CKiller24_control_sets_placed.rpt
 | Design       : CKiller24
@@ -73,8 +73,8 @@ Table of Contents
 +----------------------+-------------------------+------------------+------------------+----------------+
 |     Clock Signal     |      Enable Signal      | Set/Reset Signal | Slice Load Count | Bel Load Count |
 +----------------------+-------------------------+------------------+------------------+----------------+
-|  clk_IBUF_BUFG       | cu/aluSRst0             |                  |                1 |              1 |
 |  clk_IBUF_BUFG       | cu/blCnt0               |                  |                1 |              1 |
+|  clk_IBUF_BUFG       | cu/aluSRst0             |                  |                1 |              1 |
 |  clk_IBUF_BUFG       | cu/exeOut0              |                  |                1 |              2 |
 |  cu/aluSLatch        |                         | cu/aluSRst       |                4 |              8 |
 |  clk_IBUF_BUFG       |                         | rst_IBUF         |                7 |             11 |
@@ -83,16 +83,16 @@ Table of Contents
 |  clk_IBUF_BUFG       | cu/PC[7]_i_1_n_0        | rst_IBUF         |                6 |             16 |
 |  clkDiv_reg_BUFG[17] |                         |                  |                7 |             18 |
 |  clk100M_IBUF_BUFG   |                         |                  |                5 |             20 |
-|  clk_IBUF_BUFG       | cu/regDataD0            |                  |               12 |             24 |
 |  clk_IBUF_BUFG       | cu/ramDataD[23]_i_1_n_0 |                  |               14 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[4]              |                  |                6 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[2]              |                  |                6 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[1]              |                  |                6 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[7]              |                  |                6 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[5]              |                  |                6 |             24 |
-|  clk_IBUF_BUFG       | rf/ad/D[6]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | cu/regDataD0            |                  |               12 |             24 |
 |  clk_IBUF_BUFG       | rf/ad/D[3]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[7]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[2]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[5]              |                  |                6 |             24 |
 |  clk_IBUF_BUFG       | rf/ad/D[0]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[4]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[1]              |                  |                6 |             24 |
+|  clk_IBUF_BUFG       | rf/ad/D[6]              |                  |                6 |             24 |
 |  clk_IBUF_BUFG       | cu/IR                   | rst_IBUF         |               21 |             24 |
 |  clk_IBUF_BUFG       | cu/opA0                 |                  |               10 |             24 |
 |  clk_IBUF_BUFG       | cu/opB0                 |                  |               14 |             24 |

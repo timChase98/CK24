@@ -47,11 +47,11 @@ read_vhdl -library xil_defaultlib {
   C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd
   C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd
 }
-read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
-set_property used_in_implementation false [get_files -all c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_ooc.xdc]
-
 read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam.xci
 set_property used_in_implementation false [get_files -all c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam_ooc.xdc]
+
+read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
+set_property used_in_implementation false [get_files -all c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_ooc.xdc]
 
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
@@ -64,8 +64,6 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 read_xdc C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc
 set_property used_in_implementation false [get_files C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc]
 
-read_xdc dont_touch.xdc
-set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 

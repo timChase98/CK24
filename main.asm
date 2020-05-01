@@ -6,8 +6,19 @@ ADDI R7, 0xFFF
 CLR R1 ; load the value 0x06 into R1
 ADDI R1, 0x06
 
-CLR R2 ; load the value 0xAA into R2
-ADDI R2, 0xAA
+CLR R5;
+ADDI R5, 0x05 ; fun bitmask
+
+CLR R2 ; load the value 0xAA into R2 using as many alu options as possible
+ADDI R2, 0x0F
+XOR R2, R5; R2 is 0x0A
+
+NEG R5
+OR R2, R5; R2 = 0xFFFFFB
+CLR R5
+ADDI R5, 0xAA
+AND R2, R5
+
 
 MVS (R2), R1+; mem[AA] = 6, r1 = 7
 

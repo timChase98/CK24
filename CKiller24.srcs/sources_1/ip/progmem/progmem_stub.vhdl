@@ -1,10 +1,10 @@
 -- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
--- Date        : Fri May  1 15:35:48 2020
+-- Date        : Fri May  1 18:08:19 2020
 -- Host        : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
--- Command     : write_vhdl -force -mode synth_stub -rename_top progmem -prefix
---               progmem_ progmem_stub.vhdl
+-- Command     : write_vhdl -force -mode synth_stub
+--               C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem_stub.vhdl
 -- Design      : progmem
 -- Purpose     : Stub declaration of top-level module interface
 -- Device      : xc7a100tcsg324-1
