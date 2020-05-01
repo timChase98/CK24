@@ -17,547 +17,558 @@
 -- Additional Comments:
 --
 ----------------------------------------------------------------------------------
+LIBRARY IEEE;
+USE IEEE.STD_LOGIC_1164.ALL;
+USE IEEE.NUMERIC_STD.ALL;
+USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 
+ENTITY ControlUnit IS
+	PORT (
+		clk : IN STD_LOGIC;
+		rst : IN STD_LOGIC;
+		regDataQ : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+		ramDataQ : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+		ramDone : IN STD_LOGIC;
+		aluRegR : IN STD_LOGIC_VECTOR(23 DOWNTO 0);
+		aluRegS : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		irOut : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+		pcOut : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
+		exeOut : OUT std_logic_vector(1 DOWNTO 0);
+		regEn : OUT std_logic;
+		regAddr : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
+		regDataD : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+		regInc : OUT STD_LOGIC;
+		regDec : OUT STD_LOGIC;
+		ramRW : OUT STD_LOGIC;
+		ramAddr : OUT STD_LOGIC_VECTOR(11 DOWNTO 0);
+		ramDataD : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+		aluSLatch : OUT STD_LOGIC;
+		aluSRst : OUT STD_LOGIC;
+		aluRegA : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+		aluRegB : OUT STD_LOGIC_VECTOR(23 DOWNTO 0);
+		aluOp : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
+		opaOut : out std_logic_vector(23 downto 0);
+		opbOut : out std_logic_vector(23 downto 0)
+	);
+END ControlUnit;
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+ARCHITECTURE Behavioral OF ControlUnit IS
 
-entity ControlUnit is
-    Port ( clk : in STD_LOGIC;
-           rst : in STD_LOGIC;
-           regDataQ : in STD_LOGIC_VECTOR(23 downto 0);
-           ramDataQ : in STD_LOGIC_VECTOR(23 downto 0);
-           ramDone : in STD_LOGIC;
-           aluRegR : in STD_LOGIC_VECTOR(23 downto 0);
-           aluRegS : in STD_LOGIC_VECTOR(3 downto 0);
-           irOut : out STD_LOGIC_VECTOR(23 downto 0);
-           pcOut : out STD_LOGIC_VECTOR(15 downto 0);
-           exeOut : out std_logic_vector(1 downto 0);
-           regEn : out std_logic;
-           regAddr : out STD_LOGIC_VECTOR(2 downto 0);
-           regDataD : out STD_LOGIC_VECTOR(23 downto 0);
-           regInc : out STD_LOGIC;
-           regDec : out STD_LOGIC;
-           ramRW : out STD_LOGIC;
-           ramAddr : out STD_LOGIC_VECTOR(11 downto 0);
-           ramDataD : out STD_LOGIC_VECTOR(23 downto 0);
-           aluSLatch : out STD_LOGIC;
-           aluSRst : out STD_LOGIC;
-           aluRegA : out STD_LOGIC_VECTOR(23 downto 0);
-           aluRegB : out STD_LOGIC_VECTOR(23 downto 0);
-           aluOp : out STD_LOGIC_VECTOR(4 downto 0)
-           );
-end ControlUnit;
+	COMPONENT progmem IS
+		PORT (
+			clka : IN STD_LOGIC;
+			ena : IN STD_LOGIC;
+			addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+			douta : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
+		);
+	END COMPONENT;
 
-architecture Behavioral of ControlUnit is
+	TYPE instructionState IS (RESET, FETCH, OP1, OP2, EXE);
+	TYPE fetchState IS (setAddr, addrValid, dataValid, pcInc);
+	TYPE operandState IS (setRegA, getRegD, ramAddrValid, ramDataCLk, ramDataValid);
+	TYPE executionState IS (opALU, aluRst, addrValid, store);
+	SIGNAL iState : instructionState;
+	SIGNAL fState : fetchState;
+	SIGNAL opState : operandState;
+	SIGNAL eState : executionState;
 
-    component progmem is
-        PORT (
-            clka : IN STD_LOGIC;
-            ena : IN STD_LOGIC;
-            addra : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-            douta : OUT STD_LOGIC_VECTOR(23 DOWNTO 0)
-      );
-    end component;
+	TYPE opTypes IS (NONE, OP_OP, BR, JMP, MV);
 
-    TYPE instructionState IS (RESET, FETCH, OP1, OP2, EXE);
-    TYPE fetchState IS (setAddr, addrValid, dataValid, pcInc);
-    TYPE operandState IS (setRegA, getRegD, ramAddrValid, ramDataValid);
-    TYPE executionState IS (opALU, aluRst, addrValid, store);
-    signal iState : instructionState;
-    signal fState : fetchState;
-    signal opState : operandState;
-    signal eState : executionState;
+	SIGNAL PC : std_logic_vector(15 DOWNTO 0);
+	SIGNAL IR : std_logic_vector(23 DOWNTO 0);
 
-    TYPE opTypes IS (NONE, OP_OP, BR, JMP, MV);
+	SIGNAL progmemAddr : std_logic_vector(15 DOWNTO 0);
+	SIGNAL progmemData : std_logic_vector(23 DOWNTO 0);
 
-    signal PC : std_logic_vector(15 downto 0);
-    signal IR : std_logic_vector(23 downto 0);
+	SIGNAL optype : opTypes;
+	SIGNAL numOPs : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	SIGNAL OPCode : STD_LOGIC_VECTOR (4 DOWNTO 0);
+	SIGNAL OP1Val : STD_LOGIC_VECTOR (2 DOWNTO 0);
+	SIGNAL OP1AM : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	SIGNAL OP2Val : STD_LOGIC_VECTOR (2 DOWNTO 0);
+	-- imm 9 is not used for any instruction
+	SIGNAL OP2AM : STD_LOGIC_VECTOR (1 DOWNTO 0);
+	SIGNAL IMM14 : std_logic_vector(13 DOWNTO 0);
+	SIGNAL IMM15 : std_logic_vector(14 DOWNTO 0);
+	SIGNAL Mask : std_logic_vector(3 DOWNTO 0);
 
-    signal progmemAddr : std_logic_vector(15 downto 0);
-    signal progmemData : std_logic_vector(23 downto 0);
+	SIGNAL opA : std_logic_vector(23 DOWNTO 0);
+	SIGNAL opB : std_logic_vector(23 DOWNTO 0);
+	SIGNAL result : std_logic_vector(23 DOWNTO 0);
 
-    signal optype : opTypes;
-    signal numOPs : STD_LOGIC_VECTOR (1 downto 0);
-    signal OPCode : STD_LOGIC_VECTOR (4 downto 0);
-    signal OP1Val : STD_LOGIC_VECTOR (2 downto 0);
-    signal OP1AM :STD_LOGIC_VECTOR (1 downto 0);
-    signal OP2Val : STD_LOGIC_VECTOR (2 downto 0);
-    -- imm 9 is not used for any instruction
-    signal OP2AM : STD_LOGIC_VECTOR (1 downto 0);
-    signal IMM14 : std_logic_vector(13 downto 0);
-    signal IMM15 : std_logic_vector(14 downto 0);
-    signal Mask : std_logic_vector(3 downto 0);
+	SIGNAL allowPostInc : std_logic_vector(1 DOWNTO 0);
+	
+	signal blCnt : std_logic_vector(11 downto 0);
+	signal blPtr : std_logic_vector(11 downto 0);
 
-    signal opA : std_logic_vector(23 downto 0);
-    signal opB : std_logic_vector(23 downto 0);
-    signal result : std_logic_vector(23 downto 0);
+BEGIN
+	PROCESS (clk, rst)
+	BEGIN
+		IF (rst = '1') THEN
+			-- init states
+			iState <= RESET;
+			fstate <= setAddr;
+			opState <= setRegA;
+			eState <= opALU;
+			ramRW <= '0';
+			-- set the program counter and instruction register to 0
+			PC <= (OTHERS => '0');
+			IR <= (OTHERS => '0');
 
-    signal allowPostInc : std_logic_vector(1 downto 0);
-    
-begin
+		ELSIF (rising_edge(clk)) THEN
+			CASE iState IS
+				WHEN RESET => 
+					iState <= FETCH;
+					fState <= setAddr;
+				WHEN FETCH => 
+					-- also handles post increment for register file addressing mode
+					exeOut <= "00";
+					opState <= setRegA;
+					aluSRst <= '0';
+					CASE fstate IS
+						WHEN setAddr => 
+							fstate <= addrValid;
+							IF (OP1AM(1) = '1' AND allowPostInc(0) = '1') THEN
+								regAddr <= OP1VAL;
+								regInc <= '1';
+								regEn <= '1';
+							END IF;
+						WHEN addrValid => 
+							-- one clock propegation from addresss valid
+							-- to data valid
+							fstate <= dataValid;
 
-    process(clk, rst)
-    begin
-        if(rst = '1') then
-            -- init states
-            iState <= RESET;
-            fstate <= setAddr;
-            opState <= setRegA;
-            eState <= opALU;
+							IF (OP2AM(1) = '1' AND allowPostInc(1) = '1') THEN
+								regAddr <= OP2VAL;
+								regInc <= '1';
+								regEn <= '1';
+							ELSE
+								regInc <= '0';
+								regEn <= '0';
+							END IF;
+						WHEN dataValid => 
+							IR <= progmemData;
+							fstate <= pcInc;
+							regInc <= '0';
+							regEn <= '0';
+						WHEN pcInc => 
+						
+							IF (IR(23 DOWNTO 20) = X"0") THEN -- halt and wait
+								fState <= dataValid;
+							ELSIF (IR(23 downto 19) = "00010") then 
+    							iState <= RESET;
+							ELSE
+								
+							PC <= PC + 1;
+							END IF;
+						
+							fstate <= setAddr;
+							CASE numOps IS
+								WHEN "00" => 
+									iState <= EXE;
+								WHEN "01" => 
+									iState <= OP1;
+								WHEN "10" => 
+									iState <= OP1;
+								WHEN "11" => 
+									iState <= EXE;
+								WHEN OTHERS => 
+									iState <= FETCH;
+                            END CASE;
+                    END CASE;
+				-- end fetch
+				WHEN OP1 => 
+					exeOut <= "01";
+					eState <= opAlu;
+					CASE opState IS
+						WHEN setRegA => 
+							regAddr <= op1Val;
+							opState <= getRegD;
+							-- get the immediate
+							-- this will be overwriten if there are two ops
+							opB <= (OTHERS => imm14(13));
+							opB(13 DOWNTO 0) <= imm14;
 
+						WHEN getRegD => 
+							IF (op1AM(0) = '1') THEN -- register indirect
+								ramAddr <= regDataQ(11 DOWNTO 0);
+								opState <= ramAddrValid;
+							ELSE -- register direct
+								opA <= regDataQ;
+								CASE numOps IS
+									WHEN "01" => 
+										iState <= EXE;
+									WHEN "10" => 
+										iState <= OP2;
+										opState <= setRegA;
+									WHEN OTHERS => 
+										iState <= FETCH;
+								END CASE;
+							END IF;
+						WHEN ramAddrValid => 
+							opState <= ramDataclk;
+						WHEN ramDataClk => 
+							opState <= ramDataValid;
+						WHEN ramDataValid => 
+							opState <= setRegA;
+							opA <= ramDataQ;
+							CASE numOps IS
+								WHEN "01" => 
+									iState <= EXE;
+								WHEN "10" => 
+									iState <= OP2;
+								WHEN OTHERS => 
+									iState <= FETCH;
+						END CASE;
+				END CASE;
+				-- end OP1
+				WHEN OP2 => 
+					exeOut <= "10";
+					CASE opState IS
+						WHEN setRegA => 
+							regAddr <= op2Val;
+							opState <= getRegD;
+						WHEN getRegD => 
+							IF (op2AM(0) = '1') THEN -- register indirect
+								ramAddr <= regDataQ(11 DOWNTO 0);
+								opState <= ramAddrValid;
+							ELSE -- register direct
+								opB <= regDataQ;
+								iState <= EXE;
+							END IF;
+						WHEN ramAddrValid => 
+							opState <= ramDataclk;
+						WHEN ramDataClk => 
+							opState <= ramDataValid;
+						WHEN ramDataValid => 
+							opState <= setRegA;
+							opB <= ramDataQ;
+							iState <= EXE;
+				END CASE;
+				-- end OP2
+				WHEN EXE => 
+					exeOut <= "11";
+					fState <= setAddr;
+					CASE opType IS
+						WHEN OP_OP => 
+							CASE eState IS
+								WHEN opALU => 
+									regAddr <= OP1Val;
+									aluOp <= opCode;
+									aluRegA <= opA;
+									aluRegB <= opB;
+									eState <= aluRst;
+								WHEN aluRst => 
+									aluSLatch <= '1';
+									IF (op1AM(0) = '1') THEN -- register indirect
+										ramAddr <= regDataQ(11 DOWNTO 0);
+										ramDataD <= aluRegR;
+									ELSE
+										regDataD <= aluRegR;
+										regEn <= '0';
+									END IF;
+									eState <= addrValid;
+								WHEN addrValid => 
+									aluSLatch <= '0';
+									IF (op1AM(0) = '1') THEN -- register indirect
+										ramRW <= '1';
+									ELSE
+										regEn <= '1';
+									END IF;
+									eState <= store;
+								WHEN store => 
+									ramRW <= '0';
+									regEn <= '0';
+									iState <= FETCH;
+									eState <= opALU;
+						END CASE;
 
-            ramRW <= '0';
-            -- set the program counter and instruction register to 0
-            PC <= (others => '0');
-            IR <= (others => '0');
+						WHEN BR => 
+							IF ((aluRegS AND mask) = mask) THEN
+								pc <= '0' & IMM15;
+							END IF;
+							iState <= FETCH;
+						WHEN JMP => 
+							CASE OPCODE IS
+								WHEN "11001" => -- JMPI
+									PC <= '0' & IMM15;
+									iState <= FETCH;
+								WHEN "11010" => -- JSR
+									-- push PC
+									CASE eState IS
+										WHEN opAlu => 
+											regAddr <= "111"; -- reg7 is the stack pointer
+											eState <= aluRst;
+										WHEN aluRst => 
+											ramAddr <= regDataQ(11 DOWNTO 0);
+											ramDataD <= X"00" & PC;
+											ramRW <= '1';
+											regDec <= '1';
+											regEn <= '1';
+											eState <= addrValid;
+										WHEN addrValid => 
+											PC <= '0' & IMM15;
+											ramRW <= '0';
+											regDec <= '0';
+											regEn <= '0';
+											iState <= FETCH;
+										WHEN OTHERS => 
+											iState <= FETCH;
+								END CASE;
+								WHEN "11011" => -- RSR
+									-- POP into PC
+									CASE eState IS
+										WHEN opAlu => 
+											regAddr <= "111"; -- reg7 is the stack pointer
+											eState <= aluRst;
+										WHEN aluRst => 
+											ramAddr <= regDataQ(11 DOWNTO 0);
+											regInc <= '1';
+											regEn <= '1';
+											eState <= addrValid;
+										WHEN addrValid => 
+											regInc <= '0';
+											regEn <= '0';
+											eState <= store;
+										WHEN store => 
+											PC <= ramDataQ(15 DOWNTO 0);
+											iState <= FETCH;
+										WHEN OTHERS => 
+											iState <= FETCH;
+								END CASE;
+								WHEN OTHERS => 
+									iState <= FETCH;
+						END CASE;
+						WHEN MV => 
+							CASE OPCODE IS
+								WHEN "01010" => -- MVS
+									CASE eState IS
+										WHEN opALU => 
+											regAddr <= OP1Val;
+											eState <= aluRst;
+										WHEN aluRst => 
+											IF (op1AM(0) = '1') THEN -- register indirect
+												ramAddr <= regDataQ(11 DOWNTO 0);
+												ramDataD <= OPB;
+											ELSE
+												regDataD <= OPB;
+												regEn <= '0';
+											END IF;
+											eState <= addrValid;
+										WHEN addrValid =>
+											IF (op1AM(0) = '1') THEN -- register indirect
+												ramRW <= '1';
+											ELSE
+												regEn <= '1';
+											END IF;
+											eState <= store;
+										WHEN store => 
+											ramRW <= '0';
+											regEn <= '0';
+											iState <= FETCH;
+											eState <= opALU;
+								END CASE;
+								WHEN "01011" => -- MVMI
+									iState <= FETCH;
+								WHEN "01101" => -- MMS
+									CASE eState IS
+										WHEN opALU => 
+											-- read mem
+											ramAddr <= IMM14(11 DOWNTO 0);
+											regAddr <= OP1VAL;
+											eState <= aluRst;
+										WHEN aluRst => 
+											eState <= addrValid;
+										WHEN addrValid => 
+											IF (OP1AM(0) = '1') THEN
+												ramAddr <= regDataQ(11 DOWNTO 0);
+												ramDataD <= ramDataQ;
+												ramRW <= '1';
+											ELSE
+												regDataD <= ramDataQ;
+												regEn <= '1';
+											END IF;
+											eState <= store;
+										WHEN store => 
+											ramRW <= '0';
+											regEn <= '0';
+											iState <= FETCH;
+											eState <= opALU;
+										WHEN OTHERS => 
+											iState <= FETCH;
+								END CASE;
+								WHEN "01100" => -- MSM
+									CASE eState IS
+										WHEN opALU => 
+											ramAddr <= IMM14(11 DOWNTO 0);
+											ramDataD <= OPA;
+											ramRW <= '1';
+											eState <= aluRst;
+										WHEN aluRst => 
+											ramRW <= '0';
+											iState <= FETCH;
+											eState <= opALU;
+										WHEN OTHERS => 
+											iState <= FETCH;
+											eState <= opALU;
+								END CASE;
+								WHEN "01110" => -- BLRM
+								    case eState is
+								        when opAlu => 
+								            blcnt <= O"0000";
+								            eState <= aluRst;
+								        when aluRst => 
+								            regAddr <= blCnt(2 downto 0);
+								            blPtr <= IMM15(11 downto 0) + blCnt;
+								            
+								        
+								        when others => 
+								            iState <= FETCH;
+								    end case;
+								            
 
-        elsif (rising_edge(clk)) then
-            case iState is
-                when RESET =>
-                    iState <= FETCH;
-                    fState <= setAddr;
-                when FETCH =>
-                    -- also handles post increment for register file addressing mode
-                    exeOut <= "00";
-                    opState <= setRegA;
-                    case fstate is
-                        when setAddr =>
-                            fstate <= addrValid;
-                            if (OP1AM(1) = '1' and allowPostInc(0) = '1') then
-                                regAddr <= OP1VAL;
-                                regInc <= '1';
-                                regEn <= '1';
-                            end if;
-                        when addrValid =>
-                            -- one clock propegation from addresss valid
-                            --      to data valid
-                            fstate <= dataValid;
-
-                            if (OP2AM(1) = '1' and allowPostInc(1) = '1') then
-                                regAddr <= OP2VAL;
-                                regInc <= '1';
-                                regEn <= '1';
-                            else
-                                regInc <= '0';
-                                regEn <= '0';
-                            end if;
-
-
-                        when dataValid =>
-                            IR <= progmemData;
-                            if(IR(23 downto 20) = X"0") then -- halt and wait
-                                fState <= dataValid;
-                            else
-                                fstate <= pcInc;
-                            end if;
-
-                            regInc <= '0';
-                            regEn <= '0';
-                        when pcInc =>
-                            PC <= PC + 1;
-                            fstate <= setAddr;
-                            case numOps is
-                                when "00" =>
-                                    iState <= EXE;
-                                when "01" =>
-                                    iState <= OP1;
-                                when "10" =>
-                                    iState <= OP1;
-                                when "11" =>
-                                    iState <= EXE;
+								WHEN OTHERS => 
+									iState <= FETCH;
+						  END CASE;
+						WHEN NONE => -- special handling for control instrutcions 
+						    CASE opcode is 
+						        when "11111" => 
+                                    aluSRst <= '0';
+                                    iState <= FETCH;
                                 when others =>
                                     iState <= FETCH;
-                            end case;
-                    end case;
-                    -- end fetch
-                when OP1 =>
-                    exeOut <= "01";
-                    eState <= opAlu;
-                    case opState is
-                        when setRegA =>
-                            regAddr <= op1Val;
-                            opState <= getRegD;
-                            -- get the immediate
-                            --      this will be overwriten if there are two ops
-                            opB <= (others => imm14(13));
-                            opB(13 downto 0) <= imm14;
+						    end case;
+						WHEN OTHERS => 
+							iState <= FETCH;
+				END CASE;
 
-                        when getRegD =>
-                            if (op1AM(0) = '1') then -- register indirect
-                                ramAddr <= regDataQ(11 downto 0);
-                                opState <= ramAddrValid;
-                            else -- register direct
-                                opA <= regDataQ;
-                                case numOps is
-                                when "01" =>
-                                        iState <= EXE;
-                                    when "10" =>
-                                        iState <= OP2;
-                                        opState <= setRegA;
-                                    when others =>
-                                        iState <= FETCH;
-                               end case;
-                            end if;
-                        when ramAddrValid =>
-                            opState <= ramDataValid;
-                        when ramDataValid =>
-                            opState <= setRegA;
-                            opA <= ramDataQ;
-                            case numOps is
-                                when "01" =>
-                                    iState <= EXE;
-                                when "10" =>
-                                    iState <= OP2;
-                                when others =>
-                                    iState <= FETCH;
-                            end case;
-                    end case;
-                    -- end OP1
-                when OP2 =>
-                    exeOut <= "10";
-                    case opState is
-                        when setRegA =>
-                            regAddr <= op2Val;
-                            opState <= getRegD;
-                        when getRegD =>
-                            if (op2AM(0) = '1') then -- register indirect
-                                ramAddr <= regDataQ(11 downto 0);
-                                opState <= ramAddrValid;
-                            else -- register direct
-                                opB <= regDataQ;
-                                iState <= EXE;
-                            end if;
-                        when ramAddrValid =>
-                            opState <= ramDataValid;
-                        when ramDataValid =>
-                            opState <= setRegA;
-                            opB <= ramDataQ;
-                            iState <= EXE;
-                    end case;
-                    -- end OP2
-                when EXE =>
-                    exeOut <= "11";
-                    fState <= setAddr;
-                    case opType is
-                        when OP_OP =>
-                            case eState is
-                                when opALU =>
-                                    regAddr <= OP1Val;
-                                    aluOp <= opCode;
-                                    aluRegA <= opA;
-                                    aluRegB <= opB;
-                                    eState <= aluRst;
-                                when aluRst =>
-                                    aluSLatch <= '1';
-                                    if (op1AM(0) = '1') then -- register indirect
-                                        ramAddr <= regDataQ(11 downto 0);
-                                        ramDataD <= aluRegR;
-                                    else
-                                        regDataD <= aluRegR;
-                                        regEn <= '0';
-                                    end if;
-                                    eState <= addrValid;
-                                when addrValid =>
-                                    aluSLatch <= '0';
-                                    if (op1AM(0) = '1') then -- register indirect
-                                        ramRW <= '1';
-                                    else
-                                        regEn <= '1';
-                                    end if;
-                                    eState <= store;
-                                when store =>
-                                    ramRW <= '0';
-                                    regEn <= '0';
-                                    iState <= FETCH;
-                                    eState <= opALU;
-                            end case;
+				-- end EXE
+				WHEN OTHERS => 
+					iState <= FETCH;
+			END CASE;
+		END IF;
+	END PROCESS;
 
-                        when BR =>
-                            if ((aluRegS and mask) = mask) then
-                                pc <= '0' & IMM15;
-                            end if;
-                            iState <= FETCH;
-                        when JMP =>
-                            case OPCODE is
-                                when "11001" =>  -- JMPI
-                                    PC <= '0' & IMM15;
-                                    iState <= FETCH;
-                                when "11010" => -- JSR
-                                    -- push PC
-                                    case eState is
-                                        when opAlu =>
-                                            regAddr <= "111"; -- reg7 is the stack pointer
-                                            eState <= aluRst;
-                                        when aluRst =>
-                                            ramAddr <= regDataQ(11 downto 0);
-                                            ramDataD <= X"00" & PC;
-                                            ramRW <= '1';
-                                            regDec <= '1';
-                                            regEn <= '1';
-                                            eState <= addrValid;
-                                        when addrValid =>
-                                            PC <= '0' & IMM15;
-                                            ramRW <= '0';
-                                            regDec <= '0';
-                                            regEn <= '0';
-                                            iState <= FETCH;
-                                        when others =>
-                                            iState <= FETCH;
-                                    end case;
-                                when "11011" => -- RSR
-                                    -- POP into PC
-                                    case eState is
-                                        when opAlu =>
-                                            regAddr <= "111"; -- reg7 is the stack pointer
-                                            eState <= aluRst;
-                                        when aluRst =>
-                                            ramAddr <= regDataQ(11 downto 0);
-                                            regInc <= '1';
-                                            regEn <= '1';
-                                            eState <= addrValid;
-                                        when addrValid =>
-                                            regInc <= '0';
-                                            regEn <= '0';
-                                            eState <= store;
-                                        when store =>
-                                            PC <= ramDataQ(15 downto 0);
-                                            iState <= FETCH;
-                                        when others =>
-                                            iState <= FETCH;
-                                    end case;
-                                when others =>
-                                    iState <= FETCH;
-                            end case;
-                        when MV =>
-                            case OPCODE is
-                                when "01010" => -- MVS
-                                    case eState is
-                                        when opALU =>
-                                            regAddr <= OP1Val;
-                                            eState <= aluRst;
-                                        when aluRst =>
-                                            if (op1AM(0) = '1') then -- register indirect
-                                                ramAddr <= regDataQ(11 downto 0);
-                                                ramDataD <= OPB;
-                                            else
-                                                regDataD <= OPB;
-                                                regEn <= '0';
-                                            end if;
-                                            eState <= addrValid;
-                                        when addrValid =>
-                                            aluSLatch <= '0';
-                                            if (op1AM(0) = '1') then -- register indirect
-                                                ramRW <= '1';
-                                            else
-                                                regEn <= '1';
-                                            end if;
-                                            eState <= store;
-                                        when store =>
-                                            ramRW <= '0';
-                                            regEn <= '0';
-                                            iState <= FETCH;
-                                            eState <= opALU;
-                                    end case;
-                               when "01011" => -- MVMI
-                                   iState <= FETCH;
-                               when "01101" => -- MMS
-                                   case eState is
-                                        when opALU =>
-                                             -- read mem
-                                             ramAddr <= IMM14(11 downto 0);
-                                             regAddr <= OP1VAL;
-                                             eState <= aluRst;
-                                        when aluRst =>
-                                             eState <= addrValid;
-                                        when addrValid =>
-                                             if (OP1AM(0) = '1') then
-                                                  ramAddr <= regDataQ(11 downto 0);
-                                                  ramDataD <= ramDataQ;
-                                                  ramRW <= '1';
-                                             else
-                                                  regDataD <= ramDataQ;
-                                                  regEn <= '1';
-                                             end if;
-                                             eState <= store;
-                                        when store =>
-                                            ramRW <= '0';
-                                            regEn <= '0';
-                                            iState <= FETCH;
-                                            eState <= opALU;
-                                        when others =>
-                                             iState <= FETCH;
-                                   end case;
-                               when "01100" => -- MSM
-                                   case eState is
-                                        when opALU =>
-                                             ramAddr <= IMM14(11 downto 0);
-                                             ramDataD <= OPA;
-                                             ramRW <= '1';
-                                             eState <= aluRst;
-                                        when aluRst =>
-                                            ramRW <= '0';
-                                            iState <= FETCH;
-                                            eState <= opALU;
-                                        when others =>
-                                            iState <= FETCH;
-                                            eState <= opALU;
-                                   end case;
-                               when others =>
-                                   iState <= FETCH;
-                            end case;
-                        when others =>
-                            iState <= FETCH;
-                    end case;
+	pm : progmem
+	PORT MAP(
+		addra => progmemAddr, clka => clk, 
+		douta => progmemData, ena => '1');
+		irOut <= IR;
+		pcOut <= PC;
+		progmemAddr <= PC;
+		OPCode <= IR(23 DOWNTO 19);
+		OP1AM <= IR(18 DOWNTO 17);
+		OP1VAL <= IR(16 DOWNTO 14);
+		OP2AM <= IR(13 DOWNTO 12);
+		OP2VAL <= IR(11 DOWNTO 9);
+		IMM14 <= IR(13 DOWNTO 0);
+		IMM15 <= IR(14 DOWNTO 0);
+		Mask <= IR(18 DOWNTO 15);
 
-                    -- end EXE
-                when others =>
-                    iState <= FETCH;
-            end case;
-        end if;
-    end process;
+        opaOut <= opa;
+        opbOut <= opb;
 
-    pm :  progmem PORT MAP (addra => progmemAddr, clka => clk,
-    douta => progmemData, ena => '1');
-    irOut <= IR;
-    pcOut <= PC;
-    progmemAddr <= PC;
+		WITH opCode SELECT numOps <= 
+			"00" WHEN "00000", -- halt
+			"00" WHEN "00001", -- wait
+			"00" WHEN "00010", -- reset
+			"00" WHEN "00011", -- blmr
+			"01" WHEN "00100", -- clr
+			"01" WHEN "00101", -- inc
+			"01" WHEN "00110", -- dec
+			"01" WHEN "00111", -- neg
+			"01" WHEN "01000", -- sll
+			"01" WHEN "01001", -- srl
+			"10" WHEN "01010", -- mvs
+			"00" WHEN "01011", -- mvmi
+			"01" WHEN "01100", -- msm
+			"00" WHEN "01101", -- mms
+			"00" WHEN "01110", -- blrm
+			"00" WHEN "01111", -- blmr
+			"10" WHEN "10000", -- add
+			"10" WHEN "10001", -- sub
+			"10" WHEN "10010", -- mul
+			"10" WHEN "10011", -- div
+			"10" WHEN "10100", -- and
+			"10" WHEN "10101", -- or
+			"10" WHEN "10110", -- xor
+			"01" WHEN "10111", -- addi
+			"01" WHEN "11000", -- subi
+			"11" WHEN "11001", -- jmpi
+			"11" WHEN "11010", -- jsr
+			"11" WHEN "11011", -- rsr
+			"11" WHEN "11100", -- br
+			"00" WHEN "11101", -- inttgl
+			"00" WHEN "11110", -- rti
+			"00" WHEN "11111"; -- clrs
 
+        WITH opCode SELECT allowPostInc <= 
+            "00" WHEN "00000", -- halt
+            "00" WHEN "00001", -- wait
+            "00" WHEN "00010", -- reset
+            "00" WHEN "00011", -- blmr
+            "01" WHEN "00100", -- clr
+            "01" WHEN "00101", -- inc
+            "01" WHEN "00110", -- dec
+            "01" WHEN "00111", -- neg
+            "01" WHEN "01000", -- sll
+            "01" WHEN "01001", -- srl
+            "11" WHEN "01010", -- mvs
+            "00" WHEN "01011", -- mvmi
+            "01" WHEN "01100", -- msm
+            "01" WHEN "01101", -- mms
+            "00" WHEN "01110", -- blrm
+            "00" WHEN "01111", -- blmr
+            "11" WHEN "10000", -- add
+            "11" WHEN "10001", -- sub
+            "11" WHEN "10010", -- mul
+            "11" WHEN "10011", -- div
+            "11" WHEN "10100", -- and
+            "11" WHEN "10101", -- or
+            "11" WHEN "10110", -- xor
+            "01" WHEN "10111", -- addi
+            "01" WHEN "11000", -- subi
+            "00" WHEN "11001", -- jmpi
+            "00" WHEN "11010", -- jsr
+            "00" WHEN "11011", -- rsr
+            "00" WHEN "11100", -- br
+            "00" WHEN "11101", -- inttgl
+            "00" WHEN "11110", -- rti
+            "00" WHEN "11111"; -- clrs
 
-    OPCode <= IR(23 downto 19);
-    OP1AM <= IR(18 downto 17);
-    OP1VAL <= IR(16 downto 14);
-    OP2AM <= IR(13 downto 12);
-    OP2VAL <= IR(11 downto 9);
-    IMM14 <= IR(13 downto 0);
-    IMM15 <= IR(14 downto 0);
-    Mask <= IR(18 downto 15);
+            WITH opCode SELECT opType <= 
+                NONE WHEN "00000", -- halt
+                NONE WHEN "00001", -- wait
+                NONE WHEN "00010", -- reset
+                NONE WHEN "00011", -- blmr
+                OP_OP WHEN "00100", -- clr
+                OP_OP WHEN "00101", -- inc
+                OP_OP WHEN "00110", -- dec
+                OP_OP WHEN "00111", -- neg
+                OP_OP WHEN "01000", -- sll
+                OP_OP WHEN "01001", -- srl
+                MV WHEN "01010", -- mvs
+                NONE WHEN "01011", -- mvmi
+                MV WHEN "01100", -- msm
+                MV WHEN "01101", -- mms
+                MV WHEN "01110", -- blrm
+                MV WHEN "01111", -- blmr
+                OP_OP WHEN "10000", -- add
+                OP_OP WHEN "10001", -- sub
+                OP_OP WHEN "10010", -- mul
+                OP_OP WHEN "10011", -- div
+                OP_OP WHEN "10100", -- and
+                OP_OP WHEN "10101", -- or
+                OP_OP WHEN "10110", -- xor
+                OP_OP WHEN "10111", -- addi
+                OP_OP WHEN "11000", -- subi
+                JMP WHEN "11001", -- jmpi
+                JMP WHEN "11010", -- jsr
+                JMP WHEN "11011", -- rsr
+                BR WHEN "11100", -- br
+                NONE WHEN "11101", -- inttgl
+                NONE WHEN "11110", -- rti
+                NONE WHEN "11111"; -- clrs
 
-
-
-    with opCode select numOps <=
-        "00" when "00000", -- halt
-        "00" when "00001", -- wait
-        "00" when "00010", -- reset
-        "00" when "00011", -- blmr
-        "01" when "00100", -- clr
-        "01" when "00101", -- inc
-        "01" when "00110", -- dec
-        "01" when "00111", -- neg
-        "01" when "01000", -- sll
-        "01" when "01001", -- srl
-        "10" when "01010", -- mvs
-        "00" when "01011", -- mvmi
-        "01" when "01100", -- msm
-        "00" when "01101", -- mms
-        "00" when "01110", -- blrm
-        "00" when "01111", -- blmr
-        "10" when "10000", -- add
-        "10" when "10001", -- sub
-        "10" when "10010", -- mul
-        "10" when "10011", -- div
-        "10" when "10100", -- and
-        "10" when "10101", -- or
-        "10" when "10110", -- xor
-        "01" when "10111", -- addi
-        "01" when "11000", -- subi
-        "11" when "11001", -- jmpi
-        "11" when "11010", -- jsr
-        "11" when "11011", -- rsr
-        "11" when "11100", -- br
-        "00" when "11101", -- inttgl
-        "00" when "11110", -- rti
-        "00" when "11111"; -- clrs
-        
-    with opCode select allowPostInc <=
-        "00" when "00000", -- halt
-        "00" when "00001", -- wait
-        "00" when "00010", -- reset
-        "00" when "00011", -- blmr
-        "01" when "00100", -- clr
-        "01" when "00101", -- inc
-        "01" when "00110", -- dec
-        "01" when "00111", -- neg
-        "01" when "01000", -- sll
-        "01" when "01001", -- srl
-        "11" when "01010", -- mvs
-        "00" when "01011", -- mvmi
-        "01" when "01100", -- msm
-        "01" when "01101", -- mms
-        "00" when "01110", -- blrm
-        "00" when "01111", -- blmr
-        "11" when "10000", -- add
-        "11" when "10001", -- sub
-        "11" when "10010", -- mul
-        "11" when "10011", -- div
-        "11" when "10100", -- and
-        "11" when "10101", -- or
-        "11" when "10110", -- xor
-        "01" when "10111", -- addi
-        "01" when "11000", -- subi
-        "00" when "11001", -- jmpi
-        "00" when "11010", -- jsr
-        "00" when "11011", -- rsr
-        "00" when "11100", -- br
-        "00" when "11101", -- inttgl
-        "00" when "11110", -- rti
-        "00" when "11111"; -- clrs
-
-    with opCode select opType <=
-        NONE when "00000", -- halt
-        NONE when "00001", -- wait
-        NONE when "00010", -- reset
-        NONE when "00011", -- blmr
-        OP_OP when "00100", -- clr
-        OP_OP when "00101", -- inc
-        OP_OP when "00110", -- dec
-        OP_OP when "00111", -- neg
-        OP_OP when "01000", -- sll
-        OP_OP when "01001", -- srl
-        MV when "01010", -- mvs
-        NONE when "01011", -- mvmi
-        MV when "01100", -- msm
-        MV when "01101", -- mms
-        NONE when "01110", -- blrm
-        NONE when "01111", -- blmr
-        OP_OP when "10000", -- add
-        OP_OP when "10001", -- sub
-        OP_OP when "10010", -- mul
-        OP_OP when "10011", -- div
-        OP_OP when "10100", -- and
-        OP_OP when "10101", -- or
-        OP_OP when "10110", -- xor
-        OP_OP when "10111", -- addi
-        OP_OP when "11000", -- subi
-        JMP when "11001", -- jmpi
-        JMP when "11010", -- jsr
-        JMP when "11011", -- rsr
-        BR when "11100", -- br
-        NONE when "11101", -- inttgl
-        NONE when "11110", -- rti
-        NONE when "11111"; -- clrs
-
-end Behavioral;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+END Behavioral;
 --

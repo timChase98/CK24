@@ -1,0 +1,496 @@
+
+*** Running vivado
+    with args -log CKiller24.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source CKiller24.tcl
+
+
+****** Vivado v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source CKiller24.tcl -notrace
+Command: synth_design -top CKiller24 -part xc7a100tcsg324-1 -flatten_hierarchy none -directive RuntimeOptimized -fsm_extraction off -quick
+WARNING: [Vivado_Tcl 4-15] The '-quick' option has been deprecated. Please use '-effort_level quick'.
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Device 21-403] Loading part xc7a100tcsg324-1
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 19544 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 797.582 ; gain = 235.633
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'CKiller24' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/Top.vhd:41]
+INFO: [Synth 8-638] synthesizing module 'RegisterFile' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/RegisterFile.vhd:45]
+INFO: [Synth 8-638] synthesizing module 'DEC8_1' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/DEC8_1.vhd:40]
+INFO: [Synth 8-256] done synthesizing module 'DEC8_1' (1#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/DEC8_1.vhd:40]
+INFO: [Synth 8-638] synthesizing module 'Reg' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/Reg.vhd:43]
+INFO: [Synth 8-256] done synthesizing module 'Reg' (2#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/Reg.vhd:43]
+INFO: [Synth 8-256] done synthesizing module 'RegisterFile' (3#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/RegisterFile.vhd:45]
+INFO: [Synth 8-638] synthesizing module 'ALU' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ALU.vhd:45]
+INFO: [Synth 8-256] done synthesizing module 'ALU' (4#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ALU.vhd:45]
+INFO: [Synth 8-638] synthesizing module 'MMU' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd:44]
+INFO: [Synth 8-3491] module 'dataRam' declared at 'C:/Users/tim_c/CK24/CKiller24.runs/synth_1/.Xil/Vivado-16128-DESKTOP-RTHS3DT/realtime/dataRam_stub.vhdl:5' bound to instance 'dm' of component 'dataRam' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd:60]
+INFO: [Synth 8-638] synthesizing module 'dataRam' [C:/Users/tim_c/CK24/CKiller24.runs/synth_1/.Xil/Vivado-16128-DESKTOP-RTHS3DT/realtime/dataRam_stub.vhdl:17]
+WARNING: [Synth 8-3848] Net done in module/entity MMU does not have driver. [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd:41]
+INFO: [Synth 8-256] done synthesizing module 'MMU' (5#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/MMU.vhd:44]
+INFO: [Synth 8-638] synthesizing module 'ControlUnit' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:55]
+INFO: [Synth 8-226] default block is never used [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:166]
+INFO: [Synth 8-226] default block is never used [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:320]
+INFO: [Synth 8-226] default block is never used [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:374]
+INFO: [Synth 8-3491] module 'progmem' declared at 'C:/Users/tim_c/CK24/CKiller24.runs/synth_1/.Xil/Vivado-16128-DESKTOP-RTHS3DT/realtime/progmem_stub.vhdl:5' bound to instance 'pm' of component 'progmem' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:452]
+INFO: [Synth 8-638] synthesizing module 'progmem' [C:/Users/tim_c/CK24/CKiller24.runs/synth_1/.Xil/Vivado-16128-DESKTOP-RTHS3DT/realtime/progmem_stub.vhdl:15]
+WARNING: [Synth 8-6014] Unused sequential element blPtr_reg was removed.  [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:422]
+INFO: [Synth 8-256] done synthesizing module 'ControlUnit' (6#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:55]
+INFO: [Synth 8-638] synthesizing module 'SevenSegmentDigitController' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:44]
+INFO: [Synth 8-638] synthesizing module 'Decoder3_8' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd:39]
+INFO: [Synth 8-226] default block is never used [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd:43]
+INFO: [Synth 8-256] done synthesizing module 'Decoder3_8' (7#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/Decoder3_8.vhd:39]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd0' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:76]
+INFO: [Synth 8-638] synthesizing module 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:40]
+INFO: [Synth 8-226] default block is never used [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:46]
+INFO: [Synth 8-256] done synthesizing module 'SevenSegmentDecoder' (8#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:40]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd1' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:77]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd2' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:78]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd3' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:79]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd4' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:80]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd5' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:81]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd6' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:82]
+INFO: [Synth 8-3491] module 'SevenSegmentDecoder' declared at 'C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDecoder.vhd:34' bound to instance 'd7' of component 'SevenSegmentDecoder' [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:83]
+INFO: [Synth 8-256] done synthesizing module 'SevenSegmentDigitController' (9#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/imports/tmc/SevenSegmentDigitController.vhd:44]
+INFO: [Synth 8-256] done synthesizing module 'CKiller24' (10#1) [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/Top.vhd:41]
+WARNING: [Synth 8-3331] design ControlUnit has unconnected port ramDone
+WARNING: [Synth 8-3331] design MMU has unconnected port done
+WARNING: [Synth 8-3331] design MMU has unconnected port rst
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 873.191 ; gain = 311.242
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 873.191 ; gain = 311.242
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 873.191 ; gain = 311.242
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 873.191 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem/progmem_in_context.xdc] for cell 'cu/pm'
+Finished Parsing XDC File [c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem/progmem_in_context.xdc] for cell 'cu/pm'
+Parsing XDC File [c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam/dataRam_in_context.xdc] for cell 'mu/dm'
+Finished Parsing XDC File [c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam/dataRam_in_context.xdc] for cell 'mu/dm'
+Parsing XDC File [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc]
+WARNING: [Vivado 12-507] No nets matched 'clk_IBUF'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:9]
+WARNING: [Vivado 12-584] No ports matched 'd[0]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:13]
+WARNING: [Vivado 12-584] No ports matched 'd[1]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:14]
+WARNING: [Vivado 12-584] No ports matched 'd[2]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:15]
+WARNING: [Vivado 12-584] No ports matched 'd[3]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:16]
+WARNING: [Vivado 12-584] No ports matched 'd[4]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:17]
+WARNING: [Vivado 12-584] No ports matched 'd[5]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:18]
+WARNING: [Vivado 12-584] No ports matched 'd[6]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:19]
+WARNING: [Vivado 12-584] No ports matched 'd[7]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:20]
+WARNING: [Vivado 12-584] No ports matched 'addr[0]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:25]
+WARNING: [Vivado 12-584] No ports matched 'addr[1]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:26]
+WARNING: [Vivado 12-584] No ports matched 'addr[2]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:27]
+WARNING: [Vivado 12-584] No ports matched 'addr[3]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:28]
+WARNING: [Vivado 12-584] No ports matched 'DP'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:68]
+WARNING: [Vivado 12-584] No ports matched 'vgaRed[0]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:155]
+WARNING: [Vivado 12-584] No ports matched 'vgaRed[1]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:156]
+WARNING: [Vivado 12-584] No ports matched 'vgaRed[2]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:157]
+WARNING: [Vivado 12-584] No ports matched 'vgaRed[3]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:158]
+WARNING: [Vivado 12-584] No ports matched 'vgaGreen[0]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:160]
+WARNING: [Vivado 12-584] No ports matched 'vgaGreen[1]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:161]
+WARNING: [Vivado 12-584] No ports matched 'vgaGreen[2]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:162]
+WARNING: [Vivado 12-584] No ports matched 'vgaGreen[3]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:163]
+WARNING: [Vivado 12-584] No ports matched 'vgaBlue[0]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:165]
+WARNING: [Vivado 12-584] No ports matched 'vgaBlue[1]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:166]
+WARNING: [Vivado 12-584] No ports matched 'vgaBlue[2]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:167]
+WARNING: [Vivado 12-584] No ports matched 'vgaBlue[3]'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:168]
+WARNING: [Vivado 12-584] No ports matched 'Hsync'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:170]
+WARNING: [Vivado 12-584] No ports matched 'Vsync'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:171]
+WARNING: [Vivado 12-584] No ports matched 'PS2_C'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:225]
+WARNING: [Vivado 12-584] No ports matched 'PS2_D'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:226]
+WARNING: [Vivado 12-584] No ports matched 'PS2_C'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:228]
+WARNING: [Vivado 12-584] No ports matched 'PS2_D'. [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc:229]
+Finished Parsing XDC File [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc]
+WARNING: [Project 1-498] One or more constraints failed evaluation while reading constraint file [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc] and the design contains unresolved black boxes. These constraints will be read post-synthesis (as long as their source constraint file is marked as used_in_implementation) and should be applied correctly then. You should review the constraints listed in the file [.Xil/CKiller24_propImpl.xdc] and check the run log file to verify that these constraints were correctly applied.
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/CKiller24_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/CKiller24_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [C:/Users/tim_c/CK24/CKiller24.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/tim_c/CK24/CKiller24.runs/synth_1/dont_touch.xdc]
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 970.066 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 970.066 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 970.066 ; gain = 408.117
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100tcsg324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 970.066 ; gain = 408.117
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property DONT_TOUCH = true for cu/pm. (constraint file  auto generated constraint, line ).
+Applied set_property DONT_TOUCH = true for mu/dm. (constraint file  auto generated constraint, line ).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 970.066 ; gain = 408.117
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5818] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the output of the operator [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ALU.vhd:56]
+INFO: [Synth 8-5845] Not enough pipeline registers after wide multiplier. Recommended levels of pipeline registers is 2 [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ALU.vhd:54]
+WARNING: [Synth 8-3936] Found unconnected internal register 'blCnt_reg' and it is trimmed from '12' to '3' bits. [C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/new/ControlUnit.vhd:418]
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 970.066 ; gain = 408.117
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     25 Bit       Adders := 1     
+	   2 Input     24 Bit       Adders := 8     
+	   2 Input     16 Bit       Adders := 1     
+	   2 Input      3 Bit       Adders := 1     
++---XORs : 
+	   2 Input     25 Bit         XORs := 1     
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	               24 Bit    Registers := 7     
+	               16 Bit    Registers := 1     
+	               12 Bit    Registers := 1     
+	                8 Bit    Registers := 1     
+	                7 Bit    Registers := 9     
+	                5 Bit    Registers := 1     
+	                4 Bit    Registers := 1     
+	                3 Bit    Registers := 5     
+	                2 Bit    Registers := 3     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	  15 Input     25 Bit        Muxes := 2     
+	   8 Input     25 Bit        Muxes := 1     
+	   2 Input     24 Bit        Muxes := 9     
+	   6 Input     24 Bit        Muxes := 6     
+	   6 Input     16 Bit        Muxes := 2     
+	   2 Input     16 Bit        Muxes := 1     
+	   4 Input     16 Bit        Muxes := 1     
+	   4 Input     12 Bit        Muxes := 1     
+	   6 Input     12 Bit        Muxes := 3     
+	   2 Input     12 Bit        Muxes := 1     
+	   2 Input      8 Bit        Muxes := 1     
+	   8 Input      8 Bit        Muxes := 2     
+	  15 Input      3 Bit        Muxes := 1     
+	   6 Input      3 Bit        Muxes := 3     
+	  11 Input      3 Bit        Muxes := 2     
+	  32 Input      3 Bit        Muxes := 1     
+	   4 Input      3 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 3     
+	   4 Input      2 Bit        Muxes := 4     
+	   6 Input      2 Bit        Muxes := 4     
+	   9 Input      2 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 39    
+	   6 Input      1 Bit        Muxes := 52    
+	  14 Input      1 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 31    
+	   9 Input      1 Bit        Muxes := 1     
+	  12 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module DEC8_1 
+Detailed RTL Component Info : 
++---Muxes : 
+	   2 Input      8 Bit        Muxes := 1     
+	   8 Input      8 Bit        Muxes := 1     
+Module Reg 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     24 Bit       Adders := 1     
++---Muxes : 
+	   2 Input     24 Bit        Muxes := 1     
+Module ALU 
+Detailed RTL Component Info : 
++---Adders : 
+	   3 Input     25 Bit       Adders := 1     
++---XORs : 
+	   2 Input     25 Bit         XORs := 1     
+	   2 Input      1 Bit         XORs := 1     
++---Registers : 
+	                4 Bit    Registers := 1     
++---Muxes : 
+	  15 Input     25 Bit        Muxes := 2     
+	   8 Input     25 Bit        Muxes := 1     
+	  15 Input      3 Bit        Muxes := 1     
+Module ControlUnit 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     16 Bit       Adders := 1     
++---Registers : 
+	               24 Bit    Registers := 7     
+	               16 Bit    Registers := 1     
+	               12 Bit    Registers := 1     
+	                5 Bit    Registers := 1     
+	                3 Bit    Registers := 4     
+	                2 Bit    Registers := 3     
+	                1 Bit    Registers := 6     
++---Muxes : 
+	   6 Input     24 Bit        Muxes := 6     
+	   2 Input     24 Bit        Muxes := 1     
+	   6 Input     16 Bit        Muxes := 2     
+	   2 Input     16 Bit        Muxes := 1     
+	   4 Input     16 Bit        Muxes := 1     
+	   4 Input     12 Bit        Muxes := 1     
+	   6 Input     12 Bit        Muxes := 3     
+	   2 Input     12 Bit        Muxes := 1     
+	   6 Input      3 Bit        Muxes := 3     
+	  11 Input      3 Bit        Muxes := 2     
+	  32 Input      3 Bit        Muxes := 1     
+	   4 Input      3 Bit        Muxes := 1     
+	   2 Input      3 Bit        Muxes := 1     
+	   2 Input      2 Bit        Muxes := 3     
+	   4 Input      2 Bit        Muxes := 4     
+	   6 Input      2 Bit        Muxes := 4     
+	   9 Input      2 Bit        Muxes := 1     
+	   4 Input      1 Bit        Muxes := 39    
+	   6 Input      1 Bit        Muxes := 52    
+	  14 Input      1 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 31    
+	   9 Input      1 Bit        Muxes := 1     
+	  12 Input      1 Bit        Muxes := 1     
+Module Decoder3_8 
+Detailed RTL Component Info : 
++---Muxes : 
+	   8 Input      8 Bit        Muxes := 1     
+Module SevenSegmentDecoder 
+Detailed RTL Component Info : 
++---Registers : 
+	                7 Bit    Registers := 1     
+Module SevenSegmentDigitController 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      3 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 1     
+	                7 Bit    Registers := 1     
+	                3 Bit    Registers := 1     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+Warning: Parallel synthesis criteria is not met 
+INFO: [Synth 8-3886] merging instance 'cu/blCnt_reg[0]' (FDE) to 'cu/blCnt_reg[1]'
+INFO: [Synth 8-3886] merging instance 'cu/blCnt_reg[1]' (FDE) to 'cu/blCnt_reg[2]'
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 970.066 ; gain = 408.117
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+ROM:
++------------+--------------+---------------+----------------+
+|Module Name | RTL Object   | Depth x Width | Implemented As | 
++------------+--------------+---------------+----------------+
+|ControlUnit | numOPs       | 32x2          | LUT            | 
+|ControlUnit | allowPostInc | 32x2          | LUT            | 
++------------+--------------+---------------+----------------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP and Shift Register Reporting
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:34 ; elapsed = 00:00:36 . Memory (MB): peak = 1006.184 ; gain = 444.234
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:35 ; elapsed = 00:00:36 . Memory (MB): peak = 1043.035 ; gain = 481.086
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:40 ; elapsed = 00:00:42 . Memory (MB): peak = 1048.816 ; gain = 486.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:40 ; elapsed = 00:00:42 . Memory (MB): peak = 1048.816 ; gain = 486.867
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:41 ; elapsed = 00:00:42 . Memory (MB): peak = 1048.816 ; gain = 486.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |dataRam       |         1|
+|2     |progmem       |         1|
++------+--------------+----------+
+
+Report Cell Usage: 
++------+---------------+------+
+|      |Cell           |Count |
++------+---------------+------+
+|1     |dataRam_bbox_0 |     1|
+|2     |progmem_bbox_1 |     1|
+|3     |BUFG           |     2|
+|4     |CARRY4         |   112|
+|5     |DSP48E1        |     1|
+|6     |DSP48E1_1      |     1|
+|7     |LUT1           |   199|
+|8     |LUT2           |    12|
+|9     |LUT3           |    95|
+|10    |LUT4           |   137|
+|11    |LUT5           |   364|
+|12    |LUT6           |   356|
+|13    |MUXF7          |    34|
+|14    |FDCE           |    55|
+|15    |FDRE           |   458|
+|16    |IBUF           |     7|
+|17    |OBUF           |    29|
++------+---------------+------+
+
+Report Instance Areas: 
++------+---------+----------------------------+------+
+|      |Instance |Module                      |Cells |
++------+---------+----------------------------+------+
+|1     |top      |                            |  1910|
+|2     |  rf     |RegisterFile                |   744|
+|3     |    ad   |DEC8_1                      |     8|
+|4     |    r0   |Reg__1                      |    83|
+|5     |    r1   |Reg__2                      |    83|
+|6     |    r2   |Reg__3                      |    83|
+|7     |    r3   |Reg__4                      |    83|
+|8     |    r4   |Reg__5                      |    83|
+|9     |    r5   |Reg__6                      |    83|
+|10    |    r6   |Reg__7                      |    83|
+|11    |    sp   |Reg                         |    83|
+|12    |  au     |ALU                         |   325|
+|13    |  mu     |MMU                         |    24|
+|14    |  cu     |ControlUnit                 |   522|
+|15    |  dp     |SevenSegmentDigitController |   170|
+|16    |    cdd  |Decoder3_8                  |     8|
+|17    |    d0   |SevenSegmentDecoder__1      |    14|
+|18    |    d1   |SevenSegmentDecoder__2      |    14|
+|19    |    d2   |SevenSegmentDecoder__3      |    14|
+|20    |    d3   |SevenSegmentDecoder__4      |    14|
+|21    |    d4   |SevenSegmentDecoder__5      |    14|
+|22    |    d5   |SevenSegmentDecoder__6      |    14|
+|23    |    d6   |SevenSegmentDecoder__7      |    14|
+|24    |    d7   |SevenSegmentDecoder         |    14|
++------+---------+----------------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:41 ; elapsed = 00:00:42 . Memory (MB): peak = 1048.816 ; gain = 486.867
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:32 ; elapsed = 00:00:40 . Memory (MB): peak = 1048.816 ; gain = 389.992
+Synthesis Optimization Complete : Time (s): cpu = 00:00:41 ; elapsed = 00:00:42 . Memory (MB): peak = 1048.816 ; gain = 486.867
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.032 . Memory (MB): peak = 1060.879 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 148 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1060.883 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+53 Infos, 40 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:46 ; elapsed = 00:00:48 . Memory (MB): peak = 1060.883 ; gain = 762.039
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1060.883 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+INFO: [Common 17-1381] The checkpoint 'C:/Users/tim_c/CK24/CKiller24.runs/synth_1/CKiller24.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file CKiller24_utilization_synth.rpt -pb CKiller24_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri May  1 17:38:10 2020...

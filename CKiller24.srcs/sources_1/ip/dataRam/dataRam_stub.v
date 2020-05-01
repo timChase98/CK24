@@ -1,10 +1,10 @@
 // Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-// Date        : Mon Apr 27 11:43:29 2020
+// Date        : Fri May  1 13:32:26 2020
 // Host        : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode synth_stub
-//               c:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam_stub.v
+//               C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam_stub.v
 // Design      : dataRam
 // Purpose     : Stub declaration of top-level module interface
 // Device      : xc7a100tcsg324-1

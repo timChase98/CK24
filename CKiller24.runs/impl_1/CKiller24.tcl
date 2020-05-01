@@ -60,6 +60,8 @@ proc step_failed { step } {
   close $ch
 }
 
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 
 start_step init_design
 set ACTIVE_STEP init_design
@@ -76,8 +78,8 @@ set rc [catch {
   set_property ip_cache_permissions {read write} [current_project]
   set_property XPM_LIBRARIES XPM_MEMORY [current_project]
   add_files -quiet C:/Users/tim_c/CK24/CKiller24.runs/synth_1/CKiller24.dcp
-  read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam.xci
   read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/progmem/progmem.xci
+  read_ip -quiet C:/Users/tim_c/CK24/CKiller24.srcs/sources_1/ip/dataRam/dataRam.xci
   read_xdc C:/Users/tim_c/CK24/CKiller24.srcs/constrs_1/imports/tmc/Keyboard.xdc
   link_design -top CKiller24 -part xc7a100tcsg324-1
   close_msg_db -file init_design.pb

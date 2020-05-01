@@ -27,7 +27,7 @@ entity CKiller24 is
 	Port (clk100M : in STD_LOGIC;  	
 	      clk : in STD_LOGIC;
 		  rst: in STD_LOGIC;
-		  sel: in STD_LOGIC_VECTOR(1 downto 0);
+		  sel: in STD_LOGIC_VECTOR(3 downto 0);
 		  AN : out STD_LOGIC_VECTOR (7 downto 0);
           CA : out STD_LOGIC_VECTOR (6 downto 0);
           exeState : out STD_LOGIC_VECTOR(1 downto 0);
@@ -66,6 +66,8 @@ architecture Behavioral of CKiller24 is
     signal ramQ : std_logic_vector(23 downto 0);
     signal ramRW : std_logic; 
     signal ramDn : std_logic;
+    
+    signal opa, opb : std_logic_vector(23 downto 0);
   
 begin
 	rf: entity RegisterFile PORT MAP (clk => clk, addr => regFileA,
@@ -94,7 +96,9 @@ begin
         aluRegR => aluR,
         aluRegS => aluS,
         aluSLatch => aluSL,
-        aluSRst => aluSR
+        aluSRst => aluSR,
+        opaOut => opa,
+        opbout => opb
         );
         
     dp: entity SevenSegmentDigitController PORT MAP (pxlClk => clkDiv(17),
@@ -102,8 +106,10 @@ begin
            AN => AN, CA => CA);
     
     with sel select display <= 
-        X"00" & regFileQ when "01",
-        ramA(7 downto 0) & ramQ when "10",
+        X"00" & regFileQ when "0001",
+        ramA(7 downto 0) & ramQ when "0010",
+        X"00" & opa when "0100",
+        X"00" & opb when "1000",
         PC(7 downto 0) & IR when others; 
     
     process(clk100M)

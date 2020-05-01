@@ -75,6 +75,10 @@ def labelToProgramCounterIMM(label, currentPC):
 		labels[label] = [-1, [currentPC]]
 		return "0" * 15
 
+def formatHex(i):
+	return "{0:06X}".format(i)
+
+
 instructionSet = readInstructonSetFile()
 labels = {}
 
@@ -117,7 +121,7 @@ if __name__ == '__main__':
 			program.append(decoded)
 		except Exception as e:
 			sys.exit(colored(str(e) + " @line " + str(lineCounter), "red"))
-		out.append("{0}:\t{1:15}\t0b{2:024b}\t0x{3:06X}".format(programCounter, line, decoded, decoded))
+		out.append("{0:2X}:     {1:15}          0b{2:024b}     0x{3:06X}".format(programCounter, line, decoded, decoded))
 		programCounter += 1
 
 	# go back and fix mixing labels
@@ -136,11 +140,15 @@ if __name__ == '__main__':
 			newOutString = "0b{0:024b}\t0x{0:06X}".format(program[instruction])
 			out[instruction] = txt.replace(oldOutString, newOutString)
 
+	invert = True
 	for line in out:
-		print(line)
+		invert = not invert
+		if invert:
+			cprint(line, "grey", "on_white")
+		else:
+			print(line)
 
-
-
+	print(", ".join(map(formatHex, program)) + ";")
 
 
 
