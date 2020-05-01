@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.2 (win64) Build 2708876 Wed Nov  6 21:40:23 MST 2019
-| Date         : Fri May  1 18:10:16 2020
+| Date         : Fri May  1 18:42:01 2020
 | Host         : DESKTOP-RTHS3DT running 64-bit major release  (build 9200)
 | Command      : report_utilization -file CKiller24_utilization_synth.rpt -pb CKiller24_utilization_synth.pb
 | Design       : CKiller24
@@ -149,9 +149,9 @@ Table of Contents
 +----------+------+---------------------+
 | FDRE     |  458 |        Flop & Latch |
 | LUT5     |  364 |                 LUT |
-| LUT6     |  356 |                 LUT |
+| LUT6     |  359 |                 LUT |
 | LUT1     |  199 |                 LUT |
-| LUT4     |  137 |                 LUT |
+| LUT4     |  134 |                 LUT |
 | CARRY4   |  112 |          CarryLogic |
 | LUT3     |   95 |                 LUT |
 | FDCE     |   55 |        Flop & Latch |

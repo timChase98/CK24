@@ -106,7 +106,7 @@ begin
            AN => AN, CA => CA);
     
     with sel select display <= 
-        X"00" & regFileQ when "0001",
+        "00000" & regFileA & regFileQ when "0001",
         ramA(7 downto 0) & ramQ when "0010",
         X"00" & opa when "0100",
         X"00" & opb when "1000",
