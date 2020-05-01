@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ; init stack
 CLR R7
 ADDI R7, 0xFFF
@@ -56,11 +55,3 @@ bar:
 	RSR
 
 
-=======
-CLR R1
-CLR R2
-ADDI R2, 0xA0
-ADDI R2, 0x55
-MSM R1, 0x10
-MMS (R2+), 0x10
->>>>>>> c745ddf888ebd81f7d15c23f3fc96bdace848117
